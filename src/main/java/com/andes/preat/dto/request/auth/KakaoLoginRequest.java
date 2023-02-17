@@ -7,6 +7,6 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class KakaoLoginRequest {
-    private String accessToken;
-    private String refreshToken;
+    private String platform;
+    private String socialToken;
 }

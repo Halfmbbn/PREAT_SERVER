@@ -20,15 +20,21 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
     @Transactional
-    public LoginResponse getProfileInfo(final String code) {
-        System.out.println("Bearer " + code);
+    public LoginResponse loginUser(final String code) {
+        System.out.println("code = " + code);
+        // kakao 조회
         String accessToken = "Bearer " + code;
         KakaoProfileResponse profileInfo = kakaoAuthClient.getProfileInfo(accessToken, "application/x-www/form-urlencoded");
+        // 내 db 에서 확인
+        boolean isNewUser = !checkUserExist(profileInfo);
+        // 불린 값
         System.out.println("profileInfo = " + profileInfo.toString());
         final User loggedInUser = addOrUpdateMember(profileInfo);
+        // jwt 발급
         String applicationAccessToken = jwtProvider.createAccessToken(loggedInUser.getId());
-        return LoginResponse.from(LoginUserResponse.from(loggedInUser), applicationAccessToken);
+        return LoginResponse.from(isNewUser, applicationAccessToken);
     }
+
     @Transactional
     private User addOrUpdateMember(final KakaoProfileResponse kakaoProfileResponse) {
         final User requestedUser = kakaoProfileResponse.toUser();
@@ -37,5 +43,10 @@ public class AuthService {
         user.update(requestedUser);
         return user;
     }
-
+    public boolean checkUserExist(final KakaoProfileResponse kakaoProfileResponse) {
+        if (!userRepository.existsUserByEmail(kakaoProfileResponse.getKakaoAccount().getEmail())) {
+            return false;
+        }
+        return true;
+    }
 }
