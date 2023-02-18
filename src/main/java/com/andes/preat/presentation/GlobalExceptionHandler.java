@@ -1,7 +1,12 @@
 package com.andes.preat.presentation;
 
 import com.andes.preat.dto.response.common.BaseExceptionResponse;
+import com.andes.preat.exception.badRequest.NotFoundPlatform;
+import com.andes.preat.exception.badRequest.NotFoundUser;
+import com.andes.preat.exception.invalidToken.ExpiredToken;
 import com.andes.preat.exception.invalidToken.InvalidTokenForm;
+import com.andes.preat.exception.invalidToken.NotFoundTokenFromHeader;
+import com.andes.preat.exception.invalidToken.NotRequiredToken;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +22,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<BaseExceptionResponse> handleFeignException(final FeignException e) {
         return ResponseEntity.status(e.status()).body(new BaseExceptionResponse(e.getMessage(), e.status(), null));
+    }
+    @ExceptionHandler(ExpiredToken.class)
+    public ResponseEntity<BaseExceptionResponse> handleExpiredTokenException(final ExpiredToken e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(NotRequiredToken.class)
+    public ResponseEntity<BaseExceptionResponse> handleNotRequiredTokenException(final NotRequiredToken e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(NotFoundTokenFromHeader.class)
+    public ResponseEntity<BaseExceptionResponse> handleNotFoundTokenFromHeaderException(final NotFoundTokenFromHeader e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(NotFoundUser.class)
+    public ResponseEntity<BaseExceptionResponse> handleNotFoundException(final NotFoundUser e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(NotFoundPlatform.class)
+    public ResponseEntity<BaseExceptionResponse> handleNotFoundPlatformException(final NotFoundPlatform e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
     }
 
 }

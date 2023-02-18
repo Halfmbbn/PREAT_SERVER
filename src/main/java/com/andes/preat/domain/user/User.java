@@ -1,6 +1,7 @@
 package com.andes.preat.domain.user;
 
 import com.andes.preat.domain.common.BaseEntity;
+import com.andes.preat.dto.request.auth.UserSignUpTastyInfoRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,17 +27,27 @@ public class User extends BaseEntity {
     private String ageRange;
     @Column
     private String profileImgUrl;
+    @Column
+    private Integer spicy;
+    @Column
+    private Integer sweet;
+    @Column
+    private Integer salty;
 
-    private User(String email, String nickname, String gender, String ageRange, String profileImgUrl) {
+
+    private User(String email, String nickname, String gender, String ageRange, String profileImgUrl, Integer spicy, Integer sweet, Integer salty) {
         this.email = email;
         this.nickname = nickname;
         this.gender = gender;
         this.ageRange = ageRange;
         this.profileImgUrl = profileImgUrl;
+        this.spicy = spicy;
+        this.sweet = sweet;
+        this.salty = salty;
     }
 
     public static User newInstance(String email, String nickname, String gender, String ageRange, String profileImgUrl) {
-        return new User(email, nickname, gender, ageRange, profileImgUrl);
+        return new User(email, nickname, gender, ageRange, profileImgUrl, null, null,null);
     }
 
     public void update(final User updateUser) {
@@ -45,25 +56,44 @@ public class User extends BaseEntity {
         updateAgeRange(updateUser.ageRange);
         updateProfileImgUrl(updateUser.profileImgUrl);
     }
+    public void updateTastyInfo(final UserSignUpTastyInfoRequest tastyInfoRequest) {
+        updateNickname(tastyInfoRequest.getNickname());
+        updateSpicy(tastyInfoRequest.getSpicy());
+        updateSweet(tastyInfoRequest.getSweet());
+        updateSalty(tastyInfoRequest.getSalty());
+    }
 
-    public void updateNickname(String nickname) {
+    public void updateNickname(final String nickname) {
         if (nickname != null) {
             this.nickname = nickname;
         }
     }
-    public void updateGender(String gender) {
+    public void updateGender(final String gender) {
         if (gender != null) {
             this.gender = gender;
         }
     }
-    public void updateAgeRange(String ageRange) {
+    public void updateAgeRange(final String ageRange) {
         if (ageRange != null) {
             this.ageRange = ageRange;
         }
     }
-    public void updateProfileImgUrl(String profileImgUrl) {
+    public void updateProfileImgUrl(final String profileImgUrl) {
         if (profileImgUrl != null) {
             this.profileImgUrl = profileImgUrl;
+        }
+    }
+    public void updateSpicy(final Integer spicy) {
+        if (spicy != null) {
+            this.spicy = spicy;
+        }
+    }public void updateSweet(final Integer sweet) {
+        if (sweet != null) {
+            this.sweet = sweet;
+        }
+    }public void updateSalty(final Integer salty) {
+        if (salty != null) {
+            this.salty = salty;
         }
     }
 }

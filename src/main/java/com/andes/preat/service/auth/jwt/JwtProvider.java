@@ -65,11 +65,11 @@ public class JwtProvider {
                 .parseClaimsJws(token);
     }
 
-    public MemberPayload getPayload(String authorizationHeader) {
+    public UserPayload getPayload(String authorizationHeader) {
         final String token = authTokenExtractor.extractToken(authorizationHeader, TOKEN_TYPE);
         Claims body = getClaimsJws(token).getBody();
         try {
-            return new MemberPayload(body.get("id", Long.class));
+            return new UserPayload(body.get("id", Long.class));
         } catch (RequiredTypeException | NullPointerException | IllegalArgumentException exception) {
             throw new IllegalArgumentException("토큰 형식이 올바르지 않습니다.");
         }
