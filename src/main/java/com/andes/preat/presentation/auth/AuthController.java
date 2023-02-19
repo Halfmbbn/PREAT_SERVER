@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/auth")
@@ -27,14 +29,20 @@ public class AuthController {
         LoginResponse loginResponse = authService.loginUser(request.getSocialToken());
         return ResponseEntity.ok().body(new BaseResponse(loginResponse));
     }
+//    @PostMapping("/signup")
+//    @Login
+//    public ResponseEntity<BaseResponse> signup(@VerifiedMember final UserPayload userPayload,
+//                                         @RequestBody @Valid final UserSignUpRequest request) {
+//        authService.signUp(userPayload.getId(), request);
+//        return ResponseEntity.ok().body(new BaseResponse(userPayload.getId()));
+//    }
     @PostMapping("/signup")
-    @Login
-    public ResponseEntity<BaseResponse> signup(@VerifiedMember final UserPayload userPayload,
-                                         @RequestBody final UserSignUpRequest request) {
-        authService.signUp(userPayload.getId(), request.getNickname(), UserSignUpTastyInfoRequest.from(request));
-        return ResponseEntity.ok().body(new BaseResponse(userPayload.getId()));
+    public ResponseEntity<BaseResponse> signup(@RequestParam final Long userId,
+                                               @Valid @RequestBody final UserSignUpRequest request) {
+        authService.signUp(userId, request);
+        return ResponseEntity.ok().body(new BaseResponse(userId));
     }
-    @GetMapping("/nicknameCheck")
+    @GetMapping("/nickname/check")
     public ResponseEntity<BaseResponse> checkNickname(@RequestParam(required = true) final String nickname) {
         NicknameCheckResponse nicknameCheckResponse = authService.checkNicknameExist(nickname);
         return ResponseEntity.ok().body(new BaseResponse(nicknameCheckResponse));

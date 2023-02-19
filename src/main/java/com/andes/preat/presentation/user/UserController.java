@@ -5,6 +5,7 @@ import com.andes.preat.dto.response.auth.NicknameCheckResponse;
 import com.andes.preat.dto.response.common.BaseResponse;
 import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
 import com.andes.preat.presentation.auth.Login;
+import com.andes.preat.service.follow.FollowService;
 import com.andes.preat.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/users")
 public class UserController {
     private final UserService userService;
+    private final FollowService followServicel;
 
     @GetMapping("/usermakefortest")
     public ResponseEntity<BaseResponse> saveUserForTest() {
@@ -30,6 +32,11 @@ public class UserController {
     public ResponseEntity<BaseResponse> updateLoggedInUserNickname(final Long userId,
                                                             @RequestBody ModifyNicknameRequest request) {
         LoggedInUserInfoResponse loggedInUserInfo = userService.updateLoggedInUserNickname(userId, request.getNickname());
+        return ResponseEntity.ok().body(new BaseResponse(loggedInUserInfo));
+    }
+    @GetMapping("/me/follows")
+    public ResponseEntity<BaseResponse> getLoggedInUserFollows(final Long userId) {
+        LoggedInUserInfoResponse loggedInUserInfo = userService.getLoggedInUserInfo(userId);
         return ResponseEntity.ok().body(new BaseResponse(loggedInUserInfo));
     }
 

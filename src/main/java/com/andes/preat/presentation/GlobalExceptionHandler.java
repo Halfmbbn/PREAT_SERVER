@@ -9,6 +9,7 @@ import com.andes.preat.exception.invalidToken.NotRequiredTokenException;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -58,5 +59,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseExceptionResponse> handleDuplicateNicknameException(final DuplicateNicknameException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
     }
-
+    @ExceptionHandler(NotFoundHateFoodException.class)
+    public ResponseEntity<BaseExceptionResponse> handleNotFoundHateFoodException(final NotFoundHateFoodException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<BaseExceptionResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseExceptionResponse(e.getMessage(),400, null));
+    }
 }

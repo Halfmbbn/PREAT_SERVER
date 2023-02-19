@@ -4,6 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorStatusCode {
+    METHOD_ARGUMENT_NOT_VALID(400, "RequestBody 또는 RequestParam을 확인해주세요."),
+    HATE_FOOD_NOT_FOUND(400, "해당 ID와 같은 싫어하는 음식을 찾을 수 없습니다."),
     FOLLOW_NOT_FOUND_FOLLOW(400, "팔로우 관계를 찾을 수 없습니다."),
     FOLLOW_ALREADY_FOLLOWING(400, "이미 팔로우 요청이 완료되었습니다."),
     FOLLOW_CANT_SELF_FOLLOW(400, "자신에게 팔로우 요청을 할 수 없습니다."),

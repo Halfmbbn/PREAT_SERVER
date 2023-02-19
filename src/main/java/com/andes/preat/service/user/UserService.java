@@ -36,6 +36,7 @@ public class UserService {
         return LoggedInUserInfoResponse.from(foundUser);
     }
 
+    @Transactional
     public LoggedInUserInfoResponse updateLoggedInUserNickname(Long userId, String nickname) {
         validateNicknameDuplicate(nickname);
         User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());

@@ -34,8 +34,9 @@ public class User extends BaseEntity {
     private Integer sweet;
     @Column
     private Integer salty;
-
-
+    @Column
+    @Enumerated(EnumType.STRING)
+    private UserState status;
     private User(String email, String nickname, String gender, String ageRange, String profileImgUrl, Integer spicy, Integer sweet, Integer salty) {
         this.email = email;
         this.nickname = nickname;
@@ -45,6 +46,7 @@ public class User extends BaseEntity {
         this.spicy = spicy;
         this.sweet = sweet;
         this.salty = salty;
+        this.status = UserState.CREATING;
     }
 
     public static User newInstance(String email, String nickname, String gender, String ageRange, String profileImgUrl) {
@@ -95,5 +97,11 @@ public class User extends BaseEntity {
         if (salty != null) {
             this.salty = salty;
         }
+    }
+    public void deleteUser() {
+        this.status = UserState.DELETED;
+    }
+    public void updateUserToRegistered() {
+        this.status = UserState.COMPLETE;
     }
 }
