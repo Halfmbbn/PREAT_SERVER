@@ -1,8 +1,7 @@
 package com.andes.preat.presentation;
 
 import com.andes.preat.dto.response.common.BaseExceptionResponse;
-import com.andes.preat.exception.badRequest.NotFoundPlatform;
-import com.andes.preat.exception.badRequest.NotFoundUser;
+import com.andes.preat.exception.badRequest.*;
 import com.andes.preat.exception.invalidToken.ExpiredToken;
 import com.andes.preat.exception.invalidToken.InvalidTokenForm;
 import com.andes.preat.exception.invalidToken.NotFoundTokenFromHeader;
@@ -41,6 +40,18 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(NotFoundPlatform.class)
     public ResponseEntity<BaseExceptionResponse> handleNotFoundPlatformException(final NotFoundPlatform e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(SelfFollowException.class)
+    public ResponseEntity<BaseExceptionResponse> handleSelfFollowException(final SelfFollowException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(AlreadyFollowingException.class)
+    public ResponseEntity<BaseExceptionResponse> handleAlreadyFollowingException(final AlreadyFollowingException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(NotFollowingException.class)
+    public ResponseEntity<BaseExceptionResponse> handleNotFollowingException(final NotFollowingException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
     }
 

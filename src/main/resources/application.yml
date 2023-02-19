@@ -1,3 +1,22 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: false
 jwt:
   secret: "6rCA64KY64uk652866eI67CU7IKs7JWE7J6Q7LCo7Lm07YOA7YyM7ZWY"
   expire-length : 3600000
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+    com.example.simple.config: debug
+#
+#spring:
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/test
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver

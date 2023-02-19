@@ -57,7 +57,6 @@ public class User extends BaseEntity {
         updateProfileImgUrl(updateUser.profileImgUrl);
     }
     public void updateTastyInfo(final UserSignUpTastyInfoRequest tastyInfoRequest) {
-        updateNickname(tastyInfoRequest.getNickname());
         updateSpicy(tastyInfoRequest.getSpicy());
         updateSweet(tastyInfoRequest.getSweet());
         updateSalty(tastyInfoRequest.getSalty());

@@ -39,10 +39,11 @@ public class AuthService {
         return LoginResponse.from(isNewUser, applicationAccessToken);
     }
     @Transactional
-    public void signUp(final Long userId, final UserSignUpTastyInfoRequest tastyInfoRequest) {
+    public void signUp(final Long userId, final String nickname, final UserSignUpTastyInfoRequest tastyInfoRequest) {
         User foundUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundUser());
         // TODO: nickname과 tastyInfo, 싫어하는 음식 update 분리
+        foundUser.updateNickname(nickname);
         foundUser.updateTastyInfo(tastyInfoRequest);
     }
 

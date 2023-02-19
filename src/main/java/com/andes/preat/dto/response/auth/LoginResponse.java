@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonPropertyOrder({"isNewUser", "accessToken"})
 public class LoginResponse {
-    private boolean isNewUser;
+    private Boolean isNewUser;
     private String accessToken;
     public static LoginResponse from(boolean isNewUser, String accessToken) {
         return new LoginResponse(isNewUser, accessToken);

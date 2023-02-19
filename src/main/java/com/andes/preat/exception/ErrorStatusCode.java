@@ -4,6 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorStatusCode {
+    FOLLOW_NOT_FOUND_FOLLOW(400, "팔로우 관계를 찾을 수 없습니다."),
+    FOLLOW_ALREADY_FOLLOWING(400, "이미 팔로우 요청이 완료되었습니다."),
+    FOLLOW_CANT_SELF_FOLLOW(400, "자신에게 팔로우 요청을 할 수 없습니다."),
     USER_NOT_FOUND_PLATFORM(400,"잘못된 소셜 플랫폼입니다."),
     USER_NOT_FOUND(400, "유저 정보를 찾을 수 없습니다."),
     TOKEN_INVALID_FORM(401, "잘못된 토큰 형식입니다."),

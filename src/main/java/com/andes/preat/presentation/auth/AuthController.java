@@ -32,15 +32,11 @@ public class AuthController {
     @Login
     public ResponseEntity<BaseResponse> signup(@VerifiedMember final UserPayload userPayload,
                                          @RequestBody final UserSignUpRequest request) {
-        authService.signUp(userPayload.getId(), UserSignUpTastyInfoRequest.from(request));
+        authService.signUp(userPayload.getId(), request.getNickname(), UserSignUpTastyInfoRequest.from(request));
         return ResponseEntity.ok().body(new BaseResponse(userPayload.getId()));
     }
-
-    // TODO : 로그인이 필요한지?
     @GetMapping("/nicknameCheck")
-    @Login
-    public ResponseEntity<BaseResponse> checkNickname(@VerifiedMember final UserPayload userPayload,
-                                               @RequestParam(required = true) final String nickname) {
+    public ResponseEntity<BaseResponse> checkNickname(@RequestParam(required = true) final String nickname) {
         NicknameCheckResponse nicknameCheckResponse = authService.checkNicknameExist(nickname);
         return ResponseEntity.ok().body(new BaseResponse(nicknameCheckResponse));
     }

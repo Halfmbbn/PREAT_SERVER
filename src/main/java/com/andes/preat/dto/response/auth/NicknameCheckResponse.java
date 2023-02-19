@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class NicknameCheckResponse {
-    private boolean isAvailable;
+    private Boolean isAvailable;
 
     public static NicknameCheckResponse from(boolean isAvailable) {
         return new NicknameCheckResponse(isAvailable);
