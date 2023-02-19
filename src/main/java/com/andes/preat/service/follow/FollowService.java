@@ -5,7 +5,7 @@ import com.andes.preat.domain.follow.FollowRepository;
 import com.andes.preat.domain.user.UserRepository;
 import com.andes.preat.exception.badRequest.AlreadyFollowingException;
 import com.andes.preat.exception.badRequest.NotFollowingException;
-import com.andes.preat.exception.badRequest.NotFoundUser;
+import com.andes.preat.exception.badRequest.NotFoundUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +37,7 @@ public class FollowService {
     }
     private void validateMemberExists(final Long userId) {
         if (!userRepository.existsById(userId)) {
-            throw new NotFoundUser();
+            throw new NotFoundUserException();
         }
     }
     @Transactional

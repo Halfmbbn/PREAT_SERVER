@@ -4,8 +4,8 @@ import com.andes.preat.exception.CustomException;
 
 import static com.andes.preat.exception.ErrorStatusCode.TOKEN_INVALID_FORM;
 
-public class InvalidTokenForm extends CustomException {
-    public InvalidTokenForm() {
+public class InvalidTokenFormException extends CustomException {
+    public InvalidTokenFormException() {
         super(TOKEN_INVALID_FORM);
     }
 }

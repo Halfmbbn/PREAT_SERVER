@@ -9,6 +9,7 @@ public enum ErrorStatusCode {
     FOLLOW_CANT_SELF_FOLLOW(400, "자신에게 팔로우 요청을 할 수 없습니다."),
     USER_NOT_FOUND_PLATFORM(400,"잘못된 소셜 플랫폼입니다."),
     USER_NOT_FOUND(400, "유저 정보를 찾을 수 없습니다."),
+    USER_NICKNAME_DUPLICATED(400, "중복된 닉네임입니다."),
     TOKEN_INVALID_FORM(401, "잘못된 토큰 형식입니다."),
     TOKEN_HEADER_EMPTY(401, "헤더에 토큰이 포함되어 있지 않습니다."),
     TOKEN_EXPIRED(401,"토큰이 만료되었습니다."),

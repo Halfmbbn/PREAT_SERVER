@@ -1,6 +1,6 @@
 package com.andes.preat.presentation.auth;
 
-import com.andes.preat.exception.invalidToken.NotFoundTokenFromHeader;
+import com.andes.preat.exception.invalidToken.NotFoundTokenFromHeaderException;
 import com.andes.preat.service.auth.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -24,7 +24,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         final String authorizationHeader = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorizationHeader == null) {
-            throw new NotFoundTokenFromHeader();
+            throw new NotFoundTokenFromHeaderException();
         }
         return jwtProvider.getPayload(authorizationHeader);
     }

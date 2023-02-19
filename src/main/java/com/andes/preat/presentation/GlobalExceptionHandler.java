@@ -2,10 +2,10 @@ package com.andes.preat.presentation;
 
 import com.andes.preat.dto.response.common.BaseExceptionResponse;
 import com.andes.preat.exception.badRequest.*;
-import com.andes.preat.exception.invalidToken.ExpiredToken;
-import com.andes.preat.exception.invalidToken.InvalidTokenForm;
-import com.andes.preat.exception.invalidToken.NotFoundTokenFromHeader;
-import com.andes.preat.exception.invalidToken.NotRequiredToken;
+import com.andes.preat.exception.invalidToken.ExpiredTokenException;
+import com.andes.preat.exception.invalidToken.InvalidTokenFormException;
+import com.andes.preat.exception.invalidToken.NotFoundTokenFromHeaderException;
+import com.andes.preat.exception.invalidToken.NotRequiredTokenException;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,32 +14,32 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(InvalidTokenForm.class)
-    public ResponseEntity<BaseExceptionResponse> handleInvalidTokenFormException(final InvalidTokenForm e) {
+    @ExceptionHandler(InvalidTokenFormException.class)
+    public ResponseEntity<BaseExceptionResponse> handleInvalidTokenFormException(final InvalidTokenFormException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseExceptionResponse.of(e));
     }
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<BaseExceptionResponse> handleFeignException(final FeignException e) {
         return ResponseEntity.status(e.status()).body(new BaseExceptionResponse(e.getMessage(), e.status(), null));
     }
-    @ExceptionHandler(ExpiredToken.class)
-    public ResponseEntity<BaseExceptionResponse> handleExpiredTokenException(final ExpiredToken e) {
+    @ExceptionHandler(ExpiredTokenException.class)
+    public ResponseEntity<BaseExceptionResponse> handleExpiredTokenException(final ExpiredTokenException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseExceptionResponse.of(e));
     }
-    @ExceptionHandler(NotRequiredToken.class)
-    public ResponseEntity<BaseExceptionResponse> handleNotRequiredTokenException(final NotRequiredToken e) {
+    @ExceptionHandler(NotRequiredTokenException.class)
+    public ResponseEntity<BaseExceptionResponse> handleNotRequiredTokenException(final NotRequiredTokenException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseExceptionResponse.of(e));
     }
-    @ExceptionHandler(NotFoundTokenFromHeader.class)
-    public ResponseEntity<BaseExceptionResponse> handleNotFoundTokenFromHeaderException(final NotFoundTokenFromHeader e) {
+    @ExceptionHandler(NotFoundTokenFromHeaderException.class)
+    public ResponseEntity<BaseExceptionResponse> handleNotFoundTokenFromHeaderException(final NotFoundTokenFromHeaderException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseExceptionResponse.of(e));
     }
-    @ExceptionHandler(NotFoundUser.class)
-    public ResponseEntity<BaseExceptionResponse> handleNotFoundException(final NotFoundUser e) {
+    @ExceptionHandler(NotFoundUserException.class)
+    public ResponseEntity<BaseExceptionResponse> handleNotFoundException(final NotFoundUserException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
     }
-    @ExceptionHandler(NotFoundPlatform.class)
-    public ResponseEntity<BaseExceptionResponse> handleNotFoundPlatformException(final NotFoundPlatform e) {
+    @ExceptionHandler(NotFoundPlatformException.class)
+    public ResponseEntity<BaseExceptionResponse> handleNotFoundPlatformException(final NotFoundPlatformException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
     }
     @ExceptionHandler(SelfFollowException.class)
@@ -52,6 +52,10 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(NotFollowingException.class)
     public ResponseEntity<BaseExceptionResponse> handleNotFollowingException(final NotFollowingException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(DuplicateNicknameException.class)
+    public ResponseEntity<BaseExceptionResponse> handleDuplicateNicknameException(final DuplicateNicknameException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
     }
 

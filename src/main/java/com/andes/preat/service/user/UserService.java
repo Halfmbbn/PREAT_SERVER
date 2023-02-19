@@ -3,11 +3,12 @@ package com.andes.preat.service.user;
 import com.andes.preat.domain.follow.FollowRepository;
 import com.andes.preat.domain.user.User;
 import com.andes.preat.domain.user.UserRepository;
+import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
+import com.andes.preat.exception.badRequest.DuplicateNicknameException;
+import com.andes.preat.exception.badRequest.NotFoundUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,5 +29,23 @@ public class UserService {
         User newUser3 = User.newInstance("abc3@email.com", "user3", "male", "20~29", "1111");
         userRepository.save(newUser3);
         System.out.println("newUser3.getId() = " + newUser3.getId());
+    }
+
+    public LoggedInUserInfoResponse getLoggedInUserInfo(final Long userId) {
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
+        return LoggedInUserInfoResponse.from(foundUser);
+    }
+
+    public LoggedInUserInfoResponse updateLoggedInUserNickname(Long userId, String nickname) {
+        validateNicknameDuplicate(nickname);
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
+        foundUser.updateNickname(nickname);
+        return LoggedInUserInfoResponse.from(foundUser);
+    }
+
+    private void validateNicknameDuplicate(String nickname) {
+        if (userRepository.existsUserByNickname(nickname)) {
+            throw new DuplicateNicknameException();
+        }
     }
 }

@@ -10,26 +10,20 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = {@UniqueConstraint(name = "follow_following_id_follower_id_unique",
+                columnNames = {"following_id", "follower_id"})})
 public class Follow extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
+    @Column(name = "follower_id")
     private Long followerId;
-    @Column
+    @Column(name = "following_id")
     private Long followingId;
-//    @Column
-//    private boolean isFollowEach;
 
-//    private Follow(Long followerId, Long followingId, boolean isFollowEach) {
-//        validateNotSelfFollow(followerId, followingId);
-//        this.followerId = followerId;
-//        this.followingId = followingId;
-//        this.isFollowEach = isFollowEach;
-//    }
-
-    private Follow(Long followerId, Long followingId) {
+    public Follow(Long id, Long followerId, Long followingId) {
+        validateNotSelfFollow(followerId, followingId);
+        this.id = id;
         this.followerId = followerId;
         this.followingId = followingId;
     }

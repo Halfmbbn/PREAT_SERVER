@@ -25,6 +25,7 @@ public class User extends BaseEntity {
     private String gender;
     @Column
     private String ageRange;
+    // TODO : 이미지 url 링크 제한
     @Column
     private String profileImgUrl;
     @Column

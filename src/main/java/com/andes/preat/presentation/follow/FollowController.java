@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1")
+@RequestMapping("/v1/users")
 public class FollowController {
     private final FollowService followService;
 
-    @PostMapping("/follow")
+    @PostMapping("/{followingId}/follow")
     public ResponseEntity<BaseResponse> follow(@RequestParam final Long followingId) {
         followService.follow(1L, followingId);
         return ResponseEntity.ok().body(new BaseResponse("ok"));
     }
-    @PostMapping("/unfollow")
+    @PostMapping("/{followingId}/unfollow")
     public ResponseEntity<BaseResponse> unfollow(@RequestParam final Long followingId) {
         followService.unfollow(1L, followingId);
         return ResponseEntity.ok().body(new BaseResponse("ok"));

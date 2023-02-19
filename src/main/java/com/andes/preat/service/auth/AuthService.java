@@ -4,13 +4,11 @@ import com.andes.preat.domain.user.User;
 import com.andes.preat.domain.user.UserRepository;
 import com.andes.preat.dto.request.auth.UserSignUpTastyInfoRequest;
 import com.andes.preat.dto.response.auth.LoginResponse;
-import com.andes.preat.dto.response.auth.LoginUserResponse;
 import com.andes.preat.dto.response.auth.NicknameCheckResponse;
 import com.andes.preat.dto.response.auth.kakao.KakaoProfileResponse;
-import com.andes.preat.exception.badRequest.NotFoundUser;
+import com.andes.preat.exception.badRequest.NotFoundUserException;
 import com.andes.preat.service.auth.jwt.JwtProvider;
 import com.andes.preat.service.user.UserService;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +39,7 @@ public class AuthService {
     @Transactional
     public void signUp(final Long userId, final String nickname, final UserSignUpTastyInfoRequest tastyInfoRequest) {
         User foundUser = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUser());
+                .orElseThrow(() -> new NotFoundUserException());
         // TODO: nickname과 tastyInfo, 싫어하는 음식 update 분리
         foundUser.updateNickname(nickname);
         foundUser.updateTastyInfo(tastyInfoRequest);

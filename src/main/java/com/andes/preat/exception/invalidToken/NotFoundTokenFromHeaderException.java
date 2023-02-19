@@ -4,8 +4,8 @@ import com.andes.preat.exception.CustomException;
 
 import static com.andes.preat.exception.ErrorStatusCode.TOKEN_HEADER_EMPTY;
 
-public class NotFoundTokenFromHeader extends CustomException {
-    public NotFoundTokenFromHeader() {
+public class NotFoundTokenFromHeaderException extends CustomException {
+    public NotFoundTokenFromHeaderException() {
         super(TOKEN_HEADER_EMPTY);
     }
 }
