@@ -29,19 +29,19 @@ public class AuthController {
         LoginResponse loginResponse = authService.loginUser(request.getSocialToken());
         return ResponseEntity.ok().body(new BaseResponse(loginResponse));
     }
-//    @PostMapping("/signup")
-//    @Login
-//    public ResponseEntity<BaseResponse> signup(@VerifiedMember final UserPayload userPayload,
-//                                         @RequestBody @Valid final UserSignUpRequest request) {
-//        authService.signUp(userPayload.getId(), request);
-//        return ResponseEntity.ok().body(new BaseResponse(userPayload.getId()));
-//    }
     @PostMapping("/signup")
-    public ResponseEntity<BaseResponse> signup(@RequestParam final Long userId,
-                                               @Valid @RequestBody final UserSignUpRequest request) {
-        authService.signUp(userId, request);
-        return ResponseEntity.ok().body(new BaseResponse(userId));
+    @Login
+    public ResponseEntity<BaseResponse> signup(@VerifiedMember final UserPayload userPayload,
+                                         @RequestBody @Valid final UserSignUpRequest request) {
+        authService.signUp(userPayload.getId(), request);
+        return ResponseEntity.ok().body(new BaseResponse(userPayload.getId()));
     }
+//    @PostMapping("/signup")
+//    public ResponseEntity<BaseResponse> signup(@RequestParam final Long userId,
+//                                               @Valid @RequestBody final UserSignUpRequest request) {
+//        authService.signUp(userId, request);
+//        return ResponseEntity.ok().body(new BaseResponse(userId));
+//    }
     @GetMapping("/nickname/check")
     public ResponseEntity<BaseResponse> checkNickname(@RequestParam(required = true) final String nickname) {
         NicknameCheckResponse nicknameCheckResponse = authService.checkNicknameExist(nickname);
