@@ -1,6 +1,9 @@
 package com.andes.preat.presentation.follow;
 
 import com.andes.preat.dto.response.common.BaseResponse;
+import com.andes.preat.presentation.auth.Login;
+import com.andes.preat.presentation.auth.VerifiedMember;
+import com.andes.preat.service.auth.jwt.UserPayload;
 import com.andes.preat.service.follow.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +16,17 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping("/{followingId}/follow")
-    public ResponseEntity<BaseResponse> follow(@RequestParam final Long followingId) {
-        followService.follow(1L, followingId);
+    @Login
+    public ResponseEntity<BaseResponse> follow(@VerifiedMember UserPayload userPayload,
+                                               @RequestParam final Long followingId) {
+        followService.follow(userPayload.getId(), followingId);
         return ResponseEntity.ok().body(new BaseResponse("ok"));
     }
     @PostMapping("/{followingId}/unfollow")
-    public ResponseEntity<BaseResponse> unfollow(@RequestParam final Long followingId) {
-        followService.unfollow(1L, followingId);
+    @Login
+    public ResponseEntity<BaseResponse> unfollow(@VerifiedMember UserPayload userPayload,
+                                                 @RequestParam final Long followingId) {
+        followService.unfollow(userPayload.getId(), followingId);
         return ResponseEntity.ok().body(new BaseResponse("ok"));
     }
 }

@@ -8,6 +8,8 @@ import com.andes.preat.dto.response.hatefood.HateFoodsResponse;
 import com.andes.preat.dto.response.user.FollowsInfoResponse;
 import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
 import com.andes.preat.presentation.auth.Login;
+import com.andes.preat.presentation.auth.VerifiedMember;
+import com.andes.preat.service.auth.jwt.UserPayload;
 import com.andes.preat.service.follow.FollowService;
 import com.andes.preat.service.user.UserService;
 import com.andes.preat.service.userhatefood.UserHateFoodService;
@@ -31,30 +33,35 @@ public class UserController {
         return ResponseEntity.ok().body(new BaseResponse("ok"));
     }
     @GetMapping("/me")
-    public ResponseEntity<BaseResponse> getLoggedInUserInfo(final Long userId) {
-        LoggedInUserInfoResponse loggedInUserInfo = userService.getLoggedInUserInfo(userId);
+    @Login
+    public ResponseEntity<BaseResponse> getLoggedInUserInfo(@VerifiedMember final UserPayload userPayload) {
+        LoggedInUserInfoResponse loggedInUserInfo = userService.getLoggedInUserInfo(userPayload.getId());
         return ResponseEntity.ok().body(new BaseResponse(loggedInUserInfo));
     }
     @PatchMapping("/me")
-    public ResponseEntity<BaseResponse> updateLoggedInUserNickname(final Long userId,
+    @Login
+    public ResponseEntity<BaseResponse> updateLoggedInUserNickname(@VerifiedMember final UserPayload userPayload,
                                                             @RequestBody ModifyNicknameRequest request) {
-        LoggedInUserInfoResponse loggedInUserInfo = userService.updateLoggedInUserNickname(userId, request.getNickname());
+        LoggedInUserInfoResponse loggedInUserInfo = userService.updateLoggedInUserNickname(userPayload.getId(), request.getNickname());
         return ResponseEntity.ok().body(new BaseResponse(loggedInUserInfo));
     }
     @GetMapping("/me/follows")
-    public ResponseEntity<BaseResponse> getLoggedInUserFollows(final Long userId) {
-        FollowsInfoResponse userFollows = userService.getUserFollows(userId);
+    @Login
+    public ResponseEntity<BaseResponse> getLoggedInUserFollows(@VerifiedMember final UserPayload userPayload) {
+        FollowsInfoResponse userFollows = userService.getUserFollows(userPayload.getId());
         return ResponseEntity.ok().body(new BaseResponse(userFollows));
     }
     @GetMapping("/me/hatefoods")
-    public ResponseEntity<BaseResponse> getUserHateFoods(final Long userId) {
-        List<HateFoodsResponse> userHateFoods = userHateFoodService.getUserHateFoods(userId);
+    @Login
+    public ResponseEntity<BaseResponse> getUserHateFoods(@VerifiedMember final UserPayload userPayload) {
+        List<HateFoodsResponse> userHateFoods = userHateFoodService.getUserHateFoods(userPayload.getId());
         return ResponseEntity.ok().body(new BaseResponse(userHateFoods));
     }
     @PostMapping("/me/hatefoods")
-    public ResponseEntity<BaseResponse> updateUserHateFoods(final Long userId,
+    @Login
+    public ResponseEntity<BaseResponse> updateUserHateFoods(@VerifiedMember final UserPayload userPayload,
                                                             @RequestBody final UpdateUserHateFoods request) {
-        userHateFoodService.updateUserHateFoods(userId, request.getHateFoods());
+        userHateFoodService.updateUserHateFoods(userPayload.getId(), request.getHateFoods());
         return ResponseEntity.ok().body(new BaseResponse("ok"));
     }
 

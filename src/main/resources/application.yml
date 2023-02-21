@@ -19,7 +19,7 @@ spring:
 
 jwt:
   secret: "6rCA64KY64uk652866eI67CU7IKs7JWE7J6Q7LCo7Lm07YOA7YyM7ZWY"
-  expire-length : 3600000
+  expire-length : 2592000000
 
 logging:
   level:
