@@ -6,16 +6,20 @@ import com.andes.preat.domain.user.UserRepository;
 import com.andes.preat.domain.user.UserState;
 import com.andes.preat.dto.request.auth.UserSignUpRequest;
 import com.andes.preat.dto.request.auth.UserSignUpTastyInfoRequest;
+import com.andes.preat.dto.request.review.ReviewWithRestaurantIdRequest;
 import com.andes.preat.dto.response.auth.LoginResponse;
 import com.andes.preat.dto.response.auth.NicknameCheckResponse;
 import com.andes.preat.dto.response.auth.kakao.KakaoProfileResponse;
 import com.andes.preat.exception.badRequest.NotFoundUserException;
 import com.andes.preat.service.auth.jwt.JwtProvider;
+import com.andes.preat.service.review.ReviewService;
 import com.andes.preat.service.user.UserService;
 import com.andes.preat.service.userhatefood.UserHateFoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +28,7 @@ public class AuthService {
     private final KakaoAuthClient kakaoAuthClient;
     private final UserRepository userRepository;
     private final UserHateFoodService userHateFoodService;
+    private final ReviewService reviewService;
     private final JwtProvider jwtProvider;
     @Transactional
     public LoginResponse loginUser(final String code) {
@@ -40,12 +45,19 @@ public class AuthService {
         String applicationAccessToken = jwtProvider.createAccessToken(loggedInUser.getId());
         return LoginResponse.from(isNewUser, applicationAccessToken);
     }
+    // TODO: 별점 update - DONE
     @Transactional
     public void signUp(final Long userId, final UserSignUpRequest request) {
         User foundUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundUserException());
         updateUserInfo(foundUser, request);
-        userHateFoodService.saveUserHateFoods(userId, request.getHateFoods());
+        userHateFoodService.updateUserHateFoods(userId, request.getHateFoods());
+        updateUserReview(foundUser, request.getReviews());
+    }
+
+    private void updateUserReview(User foundUser, List<ReviewWithRestaurantIdRequest> reviews) {
+        // WARN: registered 값이 바로 안바뀌면 동시성 이슈가 있을 수도 있음.
+        reviewService.saveReviewsWithList(foundUser, reviews);
     }
 
     private void updateUserInfo(User foundUser, UserSignUpRequest request) {
@@ -78,4 +90,5 @@ public class AuthService {
         }
         return true;
     }
+
 }

@@ -2,6 +2,7 @@ package com.andes.preat.service.follow;
 
 import com.andes.preat.domain.follow.Follow;
 import com.andes.preat.domain.follow.FollowRepository;
+import com.andes.preat.domain.user.User;
 import com.andes.preat.domain.user.UserRepository;
 import com.andes.preat.exception.badRequest.AlreadyFollowingException;
 import com.andes.preat.exception.badRequest.NotFollowingException;
@@ -18,39 +19,32 @@ public class FollowService {
     private final UserRepository userRepository;
     @Transactional
     public void follow(final Long followerId, final Long followingId) {
-        validateMemberExists(followerId);
-        validateMemberExists(followingId);
-        validateNotFollowing(followerId, followingId);
-        final Follow follow = Follow.builder()
-                .followerId(followerId)
-                .followingId(followingId)
-                .build();
-        followRepository.save(follow);
-        System.out.println("follow = " + follow);
-//        memberRepository.increaseFollowerCount(followingId);
+        User foundFollowerUser = userRepository.findById(followerId)
+                .orElseThrow(() -> new NotFollowingException());
+        User foundFollowingUser = userRepository.findById(followingId)
+                .orElseThrow(() -> new NotFollowingException());
+        validateNotFollowing(foundFollowerUser, foundFollowingUser);
+        Follow newFollow = Follow.newInstance(foundFollowerUser, foundFollowingUser);
+        followRepository.save(newFollow);
     }
 
-    private void validateNotFollowing(final Long followerId, final Long followingId) {
-        if (followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
+    private void validateNotFollowing(final User follower, final User following) {
+        if (followRepository.existsByFollowerAndFollowing(follower, following)) {
             throw new AlreadyFollowingException();
-        }
-    }
-    private void validateMemberExists(final Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new NotFoundUserException();
         }
     }
     @Transactional
     public void unfollow(final Long followerId, final Long followingId) {
-        validateMemberExists(followerId);
-        validateMemberExists(followingId);
-        final Follow following = findFollowingRelation(followerId, followingId);
+        User foundFollowerUser = userRepository.findById(followerId)
+                .orElseThrow(() -> new NotFollowingException());
+        User foundFollowingUser = userRepository.findById(followingId)
+                .orElseThrow(() -> new NotFollowingException());
+        final Follow following = findFollowingRelation(foundFollowerUser, foundFollowingUser);
         followRepository.delete(following);
-//        memberRepository.decreaseFollowerCount(followingId);
     }
 
-    private Follow findFollowingRelation(final Long followerId, final Long followingId) {
-        return followRepository.findByFollowerIdAndFollowingId(followerId, followingId)
+    private Follow findFollowingRelation(final User follower, final User following) {
+        return followRepository.findByFollowerAndFollowing(follower, following)
                 .orElseThrow(NotFollowingException::new);
     }
 }

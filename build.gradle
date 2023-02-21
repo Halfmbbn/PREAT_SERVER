@@ -1,7 +1,15 @@
+buildscript {
+	ext {
+		querydslVersion = "5.0.0"
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.8'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+
 }
 
 group = 'com.andes'
@@ -43,6 +51,10 @@ dependencies {
 	testImplementation('org.junit.jupiter:junit-jupiter')
 	testImplementation('org.junit.jupiter:junit-jupiter-api')
 	testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
+
+	implementation "com.querydsl:querydsl-jpa:${querydslVersion}"
+	annotationProcessor "com.querydsl:querydsl-apt:${querydslVersion}"
+
 }
 ext {
 	set('springCloudVersion', "2021.0.4")
@@ -54,4 +66,20 @@ dependencyManagement {
 }
 tasks.named('test') {
 	useJUnitPlatform()
+}
+def querydslDir = "src/generated/querydsl"
+
+//def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
 }

@@ -6,6 +6,7 @@ import com.andes.preat.domain.hatefood.userhatefood.UserHateFood;
 import com.andes.preat.domain.hatefood.userhatefood.UserHateFoodRepository;
 import com.andes.preat.domain.user.User;
 import com.andes.preat.domain.user.UserRepository;
+import com.andes.preat.dto.response.hatefood.HateFoodsResponse;
 import com.andes.preat.exception.badRequest.NotFoundHateFoodException;
 import com.andes.preat.exception.badRequest.NotFoundUserException;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +24,18 @@ public class UserHateFoodService {
     private final HateFoodRepository hateFoodRepository;
     private final UserRepository userRepository;
 
-    @Transactional
-    public void saveUserHateFoods(final Long userId, final List<Long> request) {
-        List<HateFood> hateFoods = request.stream()
-                .map(id -> hateFoodRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundHateFoodException()))
-                .distinct().collect(Collectors.toList());
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
-        addUserHateFoods(foundUser, hateFoods);
-    }
+    // TODO : 싫어하는 음식 저장
+//    @Transactional
+//    public void saveUserHateFoods(final Long userId, final List<Long> request) {
+//        Long deleteHateFoods = userHateFoodRepository.deleteAllByUserId(userId);
+//        so
+//        List<HateFood> hateFoods = request.stream()
+//                .map(id -> hateFoodRepository.findById(id)
+//                        .orElseThrow(() -> new NotFoundHateFoodException()))
+//                .distinct().collect(Collectors.toList());
+//        User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
+//        addUserHateFoods(foundUser, hateFoods);
+//    }
 
     private void addUserHateFoods(final User foundUser, final List<HateFood> hateFoods) {
         if (!hateFoods.isEmpty()) {
@@ -44,6 +48,22 @@ public class UserHateFoodService {
         }
     }
     // TODO : 유저별 싫어하는 음식 선택 결과 조회
-    // TODO : 싫어하는 음식 저장
+    public List<HateFoodsResponse> getUserHateFoods(final Long userId) {
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
+        List<UserHateFood> userHateFoods = userHateFoodRepository.findAllByUser(foundUser);
+        List<HateFoodsResponse> hateFoodsResponses = userHateFoods.stream().map(hf -> HateFoodsResponse.from(hf.getHateFood())).collect(Collectors.toList());
+        return hateFoodsResponses;
+    }
     // TODO : 싫어하는 음식 업데이트
+    @Transactional
+    public void updateUserHateFoods(final Long userId, final List<Long> request) {
+        List<HateFood> hateFoods = request.stream()
+                .map(id -> hateFoodRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundHateFoodException()))
+                .distinct().collect(Collectors.toList());
+        Long deleteHateFoods = userHateFoodRepository.deleteAllByUserId(userId);
+        System.out.println("deleteHateFoods = " + deleteHateFoods);
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
+        addUserHateFoods(foundUser, hateFoods);
+    }
 }

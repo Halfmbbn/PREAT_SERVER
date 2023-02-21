@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -50,7 +51,7 @@ public class User extends BaseEntity {
     }
 
     public static User newInstance(String email, String nickname, String gender, String ageRange, String profileImgUrl) {
-        return new User(email, nickname, gender, ageRange, profileImgUrl, null, null,null);
+        return new User(email, nickname, gender, ageRange, profileImgUrl, null, null, null);
     }
 
     public void update(final User updateUser) {
@@ -98,10 +99,28 @@ public class User extends BaseEntity {
             this.salty = salty;
         }
     }
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+        final User user = (User) o;
+        return Objects.equals(id, user.getId());
+    }
     public void deleteUser() {
         this.status = UserState.DELETED;
     }
     public void updateUserToRegistered() {
         this.status = UserState.COMPLETE;
+    }
+
+    public boolean isRegistered() {
+        if (this.status != UserState.COMPLETE) {
+            return false;
+        }
+        return true;
     }
 }

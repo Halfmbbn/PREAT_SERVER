@@ -3,12 +3,18 @@ package com.andes.preat.service.user;
 import com.andes.preat.domain.follow.FollowRepository;
 import com.andes.preat.domain.user.User;
 import com.andes.preat.domain.user.UserRepository;
+import com.andes.preat.dto.response.user.FollowUserInfoResponse;
+import com.andes.preat.dto.response.user.FollowsInfoResponse;
 import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
+import com.andes.preat.exception.badRequest.AlreadyFollowingException;
 import com.andes.preat.exception.badRequest.DuplicateNicknameException;
 import com.andes.preat.exception.badRequest.NotFoundUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +54,20 @@ public class UserService {
         if (userRepository.existsUserByNickname(nickname)) {
             throw new DuplicateNicknameException();
         }
+    }
+
+    // TODO: 유저 닉네임으로 검색
+    public LoggedInUserInfoResponse getUserByNickname(final String requestNickname) {
+        User foundUser = userRepository.findByNickname(requestNickname).orElseThrow(() -> new NotFoundUserException());
+        return LoggedInUserInfoResponse.from(foundUser);
+    }
+    // TODO: 내 팔로우 목록 가져오기
+    public FollowsInfoResponse getUserFollows(final Long userId) {
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
+        if (!followRepository.existsByFollower(foundUser)) {
+            return FollowsInfoResponse.from(foundUser, Collections.emptyList());
+        }
+        List<FollowUserInfoResponse> followUserInfoResponses = followRepository.findAllByUserId(foundUser);
+        return FollowsInfoResponse.from(foundUser, followUserInfoResponses);
     }
 }

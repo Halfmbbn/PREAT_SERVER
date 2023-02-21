@@ -67,4 +67,36 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseExceptionResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseExceptionResponse(e.getMessage(),400, null));
     }
+    @ExceptionHandler(InvalidRatingValueException.class)
+    public ResponseEntity<BaseExceptionResponse> handleInvalidRatingValueException(final InvalidRatingValueException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(AlreadyWrittenReviewException.class)
+    public ResponseEntity<BaseExceptionResponse> handleAlreadyWrittenReviewException(final AlreadyWrittenReviewException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(RegisterNotCompletedException.class)
+    public ResponseEntity<BaseExceptionResponse> handleRegisterNotCompletedException(final RegisterNotCompletedException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ResponseEntity<BaseExceptionResponse> handleRestaurantNotFoundException(final RestaurantNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<BaseExceptionResponse> handleReviewNotFoundException(final ReviewNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(NotAuthorException.class)
+    public ResponseEntity<BaseExceptionResponse> handleNotAuthorException(final NotAuthorException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(AlreadyWrittenUserWishException.class)
+    public ResponseEntity<BaseExceptionResponse> handleAlreadyWrittenUserWishException(final AlreadyWrittenUserWishException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
+    @ExceptionHandler(UserWishNotFoundException.class)
+    public ResponseEntity<BaseExceptionResponse> handleUserWishNotFoundException(final UserWishNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
 }

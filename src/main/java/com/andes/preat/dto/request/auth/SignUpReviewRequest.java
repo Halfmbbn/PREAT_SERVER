@@ -1,0 +1,12 @@
+package com.andes.preat.dto.request.auth;
+
+import lombok.*;
+
+@Getter
+@ToString
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class SignUpReviewRequest {
+    private Long restaurantId;
+    private Integer rating;
+}
