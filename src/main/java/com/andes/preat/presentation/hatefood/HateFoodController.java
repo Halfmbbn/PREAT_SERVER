@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/hatefoods")
+@RequestMapping("/v1/dislikes")
 public class HateFoodController {
     private final HateFoodService hateFoodService;
 

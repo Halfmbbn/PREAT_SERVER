@@ -28,7 +28,7 @@ public class SearchController {
         return ResponseEntity.ok().body(new BaseResponse(foundUser));
     }
     // 싫어하는 음식 검색
-    @GetMapping("/search/hatefoods")
+    @GetMapping("/search/dislikes")
     public ResponseEntity<BaseResponse> searchHateFoods(@RequestParam final String keyword) {
         SearchResponse searchResponse = hateFoodService.findByFoodContaining(keyword);
         return ResponseEntity.ok().body(new BaseResponse(searchResponse));

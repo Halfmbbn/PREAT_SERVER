@@ -10,12 +10,13 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HateFood {
+    private static final int MAXIMUM_IMAGE_URL_LENGTH = 15000;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String food;
-    @Column
+    @Column(length = MAXIMUM_IMAGE_URL_LENGTH)
     private String imgUrl;
 
     private HateFood(String food, String imgUrl) {

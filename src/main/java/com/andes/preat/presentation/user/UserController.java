@@ -51,13 +51,13 @@ public class UserController {
         FollowsInfoResponse userFollows = userService.getUserFollows(userPayload.getId());
         return ResponseEntity.ok().body(new BaseResponse(userFollows));
     }
-    @GetMapping("/me/hatefoods")
+    @GetMapping("/me/dislikes")
     @Login
     public ResponseEntity<BaseResponse> getUserHateFoods(@VerifiedMember final UserPayload userPayload) {
         List<HateFoodsResponse> userHateFoods = userHateFoodService.getUserHateFoods(userPayload.getId());
         return ResponseEntity.ok().body(new BaseResponse(userHateFoods));
     }
-    @PostMapping("/me/hatefoods")
+    @PostMapping("/me/dislikes")
     @Login
     public ResponseEntity<BaseResponse> updateUserHateFoods(@VerifiedMember final UserPayload userPayload,
                                                             @RequestBody final UpdateUserHateFoods request) {
