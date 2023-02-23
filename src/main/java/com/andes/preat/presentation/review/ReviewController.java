@@ -88,8 +88,9 @@ public class ReviewController {
 
     // 내 리뷰 리스트 불러오기
     @GetMapping("/users/me/mylist")
-    public ResponseEntity<BaseResponse> findMyList(@RequestParam final Long userId) {
-        RestaurantsResponse restaurantsResponse = reviewService.findByUserAndIsShownTrue(userId);
+    @Login
+    public ResponseEntity<BaseResponse> findMyList(@VerifiedMember final UserPayload userPayload) {
+        RestaurantsResponse restaurantsResponse = reviewService.findByUserAndIsShownTrue(userPayload.getId());
         return ResponseEntity.ok().body(new BaseResponse(restaurantsResponse));
     }
     // TODO: 친구의 리뷰 리스트 불러오기
