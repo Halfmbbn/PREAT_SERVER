@@ -22,12 +22,12 @@ public class FollowController {
         followService.follow(userPayload.getId(), followingId);
         return ResponseEntity.ok().body(new BaseResponse("ok"));
     }
-//    @PostMapping("/{followingId}/follow/test")
-//    public ResponseEntity<BaseResponse> followTest(@RequestParam final Long userId,
-//                                               @RequestParam final Long followingId) {
-//        followService.follow(userId, followingId);
-//        return ResponseEntity.ok().body(new BaseResponse("ok"));
-//    }
+    @PostMapping("/{followingId}/follow/test")
+    public ResponseEntity<BaseResponse> followTest(@RequestParam final Long userId,
+                                               @RequestParam final Long followingId) {
+        followService.follow(userId, followingId);
+        return ResponseEntity.ok().body(new BaseResponse("ok"));
+    }
     @PostMapping("/{followingId}/unfollow")
     @Login
     public ResponseEntity<BaseResponse> unfollow(@VerifiedMember UserPayload userPayload,

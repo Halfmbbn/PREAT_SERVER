@@ -6,6 +6,7 @@ import com.andes.preat.domain.review.Review;
 import com.andes.preat.domain.review.ReviewRepository;
 import com.andes.preat.domain.user.User;
 import com.andes.preat.domain.user.UserRepository;
+import com.andes.preat.domain.user.UserState;
 import com.andes.preat.domain.userwish.UserWish;
 import com.andes.preat.domain.userwish.UserWishRepository;
 import com.andes.preat.dto.request.review.ReviewListRequest;
@@ -34,18 +35,17 @@ public class UserWishService {
         validateRegisterCompleted(foundUser);
         final Restaurant foundRestaurant = findRestaurantById(restaurantId);
         final Long reviewId = saveUserWish(foundUser, foundRestaurant);
-//        saveInventoryProduct(member, product);
-//        productRepository.updateProductStatisticsForReviewInsert(product.getId(), reviewRequest.getRating());
         return reviewId;
     }
     private User findUserById(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findByIdAndStatus(userId, UserState.COMPLETE)
                 .orElseThrow(NotFoundUserException::new);
     }
     private Restaurant findRestaurantById(Long restaurantId) {
         return restaurantRepository.findById(restaurantId)
                 .orElseThrow(RestaurantNotFoundException::new);
     }
+    // 리팩토링 필요
     private void validateRegisterCompleted(final User user) {
         if (!user.isRegistered()) {
             throw new RegisterNotCompletedException();

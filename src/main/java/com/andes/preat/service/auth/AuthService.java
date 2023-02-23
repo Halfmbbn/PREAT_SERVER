@@ -11,6 +11,7 @@ import com.andes.preat.dto.response.auth.LoginResponse;
 import com.andes.preat.dto.response.auth.NicknameCheckResponse;
 import com.andes.preat.dto.response.auth.kakao.KakaoProfileResponse;
 import com.andes.preat.exception.badRequest.AlreadyRegisteredException;
+import com.andes.preat.exception.badRequest.DuplicateNicknameException;
 import com.andes.preat.exception.badRequest.NotFoundUserException;
 import com.andes.preat.service.auth.jwt.JwtProvider;
 import com.andes.preat.service.review.ReviewService;
@@ -69,9 +70,16 @@ public class AuthService {
     }
 
     private void updateUserInfo(User foundUser, UserSignUpRequest request) {
+        validateNicknameDuplicate(request.getNickname());
         foundUser.updateNickname(request.getNickname());
         foundUser.updateTastyInfo(UserSignUpTastyInfoRequest.from(request));
         foundUser.updateUserToRegistered();
+    }
+
+    private void validateNicknameDuplicate(String nickname) {
+        if (userRepository.existsUserByNickname(nickname)) {
+            throw new DuplicateNicknameException();
+        }
     }
 
     private User addOrUpdateMember(final KakaoProfileResponse kakaoProfileResponse) {

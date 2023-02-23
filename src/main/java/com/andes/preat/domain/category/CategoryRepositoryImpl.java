@@ -24,7 +24,10 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
                 .orderBy(QRestaurant.restaurant.category.id.count().desc())
                 .limit(5)
                 .fetch();
-        System.out.println("longs = " + responses);
+
+        if (responses.isEmpty()) {
+            return null;
+        }
         return responses;
     }
 
@@ -53,6 +56,9 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
                 .orderBy(QReview.review.rating.max().desc())
                 .limit(5)
                 .fetch();
+        if (responses.isEmpty()) {
+            return null;
+        }
         return responses;
     }
     @Override

@@ -18,8 +18,8 @@ public class UserSignUpRequest {
     private Integer sweet;
     @NotNull(message = "입맛 정보는 null 값이 될 수 없습니다.")
     private Integer spicy;
-    @NotNull(message = "입맛 정보는 null 값이 될 수 없습니다.")
-    private Integer salty;
+//    @NotNull(message = "입맛 정보는 null 값이 될 수 없습니다.")
+//    private Integer salty;
     private List<Long> hateFoods;
     private List<ReviewWithRestaurantIdRequest> reviews;
 }

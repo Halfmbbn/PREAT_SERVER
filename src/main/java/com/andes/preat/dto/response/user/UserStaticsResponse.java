@@ -11,10 +11,10 @@ import java.util.List;
 public class UserStaticsResponse {
     private LoggedInUserInfoResponse userInfo;
     private List<MostVisitedCategoryResponse> mostVisted;
-    private List<MostVisitedCategoryResponse> highScored;
-    private List<LoggedInUserInfoResponse> similar;
+    private List<HighScoredCategoryResponse> highScored;
+    private List<SimilarFollowsResponse> similar;
 
-    public static UserStaticsResponse from(LoggedInUserInfoResponse userInfo, List<MostVisitedCategoryResponse> mostVist, List<MostVisitedCategoryResponse> highScored, List<LoggedInUserInfoResponse> similar) {
+    public static UserStaticsResponse from(LoggedInUserInfoResponse userInfo, List<MostVisitedCategoryResponse> mostVist, List<HighScoredCategoryResponse> highScored, List<SimilarFollowsResponse> similar) {
         return new UserStaticsResponse(userInfo, mostVist, highScored, similar);
     }
 }

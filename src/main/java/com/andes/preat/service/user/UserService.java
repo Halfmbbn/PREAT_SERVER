@@ -5,10 +5,8 @@ import com.andes.preat.domain.follow.FollowRepository;
 import com.andes.preat.domain.review.ReviewRepository;
 import com.andes.preat.domain.user.User;
 import com.andes.preat.domain.user.UserRepository;
-import com.andes.preat.dto.response.user.FollowUserInfoResponse;
-import com.andes.preat.dto.response.user.FollowsInfoResponse;
-import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
-import com.andes.preat.dto.response.user.MostVisitedCategoryResponse;
+import com.andes.preat.domain.user.UserState;
+import com.andes.preat.dto.response.user.*;
 import com.andes.preat.exception.badRequest.DuplicateNicknameException;
 import com.andes.preat.exception.badRequest.NotFoundUserException;
 import lombok.RequiredArgsConstructor;
@@ -40,15 +38,12 @@ public class UserService {
         userRepository.save(newUser3);
         System.out.println("newUser3.getId() = " + newUser3.getId());
     }
-
-    public LoggedInUserInfoResponse getLoggedInUserInfo(final Long userId) {
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
-//        calculateCategoryStatics(foundUser);
-        return LoggedInUserInfoResponse.from(foundUser);
-    }
-//    TODO: 유저 통계
-    public void calculateCategoryStatics(Long userId) {
+    public UserStaticsResponse getLoggedInUserInfo(Long userId) {
+        User foundUser = userRepository.findByIdAndStatus(userId, UserState.COMPLETE).orElseThrow(() -> new NotFoundUserException());
+        List<SimilarFollowsResponse> similarity = followRepository.findSimilarByUser(foundUser);
         List<MostVisitedCategoryResponse> MVCategory = categoryRepository.findByUserMostCategory(userId);
+        List<HighScoredCategoryResponse> HSCategory = categoryRepository.findByUserHighScoredCategory(userId);
+        return UserStaticsResponse.from(LoggedInUserInfoResponse.from(foundUser), MVCategory, HSCategory, similarity);
     }
 
     @Transactional

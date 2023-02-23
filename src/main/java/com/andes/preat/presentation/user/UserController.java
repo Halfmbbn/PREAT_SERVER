@@ -7,6 +7,7 @@ import com.andes.preat.dto.response.common.BaseResponse;
 import com.andes.preat.dto.response.hatefood.HateFoodsResponse;
 import com.andes.preat.dto.response.user.FollowsInfoResponse;
 import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
+import com.andes.preat.dto.response.user.UserStaticsResponse;
 import com.andes.preat.presentation.auth.Login;
 import com.andes.preat.presentation.auth.VerifiedMember;
 import com.andes.preat.service.auth.jwt.UserPayload;
@@ -30,17 +31,6 @@ public class UserController {
     public ResponseEntity<BaseResponse> saveUserForTest() {
         userService.saveUserForTest();
         return ResponseEntity.ok().body(new BaseResponse("ok"));
-    }
-    @GetMapping("/me")
-    @Login
-    public ResponseEntity<BaseResponse> getLoggedInUserInfo(@VerifiedMember final UserPayload userPayload) {
-        LoggedInUserInfoResponse loggedInUserInfo = userService.getLoggedInUserInfo(userPayload.getId());
-        return ResponseEntity.ok().body(new BaseResponse(loggedInUserInfo));
-    }
-    @GetMapping("/me/test")
-    public ResponseEntity<BaseResponse> getLoggedInUserInfoTest(@RequestParam final Long userPayload) {
-        LoggedInUserInfoResponse loggedInUserInfo = userService.getLoggedInUserInfo(userPayload);
-        return ResponseEntity.ok().body(new BaseResponse(loggedInUserInfo));
     }
     @PatchMapping("/me")
     @Login
@@ -68,10 +58,10 @@ public class UserController {
         userHateFoodService.updateUserHateFoods(userPayload.getId(), request.getHateFoods());
         return ResponseEntity.ok().body(new BaseResponse("ok"));
     }
-    @GetMapping("/me/info/test")
-    public ResponseEntity<BaseResponse> getUserHateFoods(@RequestParam final Long userPayload) {
-        userService.calculateCategoryStatics(userPayload);
-        return ResponseEntity.ok().body(new BaseResponse(null));
+    @GetMapping("/me")
+    public ResponseEntity<BaseResponse> getLoggedInUserInfo(@RequestParam final Long userPayload) {
+        UserStaticsResponse userInfo = userService.getLoggedInUserInfo(userPayload);
+        return ResponseEntity.ok().body(new BaseResponse(userInfo));
     }
 
 }
