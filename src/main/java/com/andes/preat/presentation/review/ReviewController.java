@@ -101,7 +101,6 @@ public class ReviewController {
     @Login
     public ResponseEntity<BaseResponse> findFollowsList(@VerifiedMember final UserPayload userPayload) {
         List<FollowsRestaurantsResponse> followsRestaurantsResponseList = reviewService.findByFollowsAndIsShownTrue(userPayload.getId());
-
         return ResponseEntity.ok().body(new BaseResponse(followsRestaurantsResponseList));
     }
 //    @GetMapping("/users/me/follows-list/test")

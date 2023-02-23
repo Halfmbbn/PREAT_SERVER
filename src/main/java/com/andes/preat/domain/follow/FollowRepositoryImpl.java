@@ -39,7 +39,8 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
     public List<SimilarFollowsResponse> findSimilarByUser(User user) {
         StringPath aliasSimilar = Expressions.stringPath("similar");
         List<SimilarFollowsResponse> responses = jpaQueryFactory.select(Projections.constructor(SimilarFollowsResponse.class, QUser.user.id, QUser.user.nickname,
-                        QUser.user.sweet.castToNum(Integer.class).subtract(user.getSweet()).abs()
+                        QUser.user.salty.castToNum(Integer.class).subtract(user.getSalty()).abs()
+                                .add(QUser.user.sweet.castToNum(Integer.class).subtract(user.getSweet()).abs())
                                 .add(QUser.user.spicy.castToNum(Integer.class).subtract(user.getSpicy()).abs()).as("similar")))
                 .from(QFollow.follow)
                 .join(QFollow.follow.following, QUser.user)

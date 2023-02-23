@@ -74,4 +74,18 @@ public class UserService {
         List<FollowUserInfoResponse> followUserInfoResponses = followRepository.findAllByUserId(foundUser);
         return FollowsInfoResponse.from(foundUser, followUserInfoResponses);
     }
+
+    // 내가 가장 많이 방문한 카테고리
+    public List<MostVisitedCategoryResponse> findByUserMostCategory(final Long userId) {
+        return categoryRepository.findByUserMostCategoryDetail(userId);
+    }
+    // 내가 가장 높게 평가한 카테고리
+    public List<HighScoredCategoryResponse> findByUserHighScoredCategory(final Long userId) {
+        return categoryRepository.findByUserHighScoredCategoryDetail(userId);
+    }
+    // 내가 가장 높게 평가한 카테고리
+    public List<SimilarFollowsResponse> findSimilarByUser(final Long userId) {
+        User foundUser = userRepository.findByIdAndStatus(userId, UserState.COMPLETE).orElseThrow(() -> new NotFoundUserException());
+        return followRepository.findSimilarByUser(foundUser);
+    }
 }

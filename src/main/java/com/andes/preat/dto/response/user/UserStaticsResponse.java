@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserStaticsResponse {
     private LoggedInUserInfoResponse userInfo;
-    private List<MostVisitedCategoryResponse> mostVisted;
+    private List<MostVisitedCategoryResponse> mostVisited;
     private List<HighScoredCategoryResponse> highScored;
     private List<SimilarFollowsResponse> similar;
 

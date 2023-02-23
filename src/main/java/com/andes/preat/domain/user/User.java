@@ -33,12 +33,12 @@ public class User extends BaseEntity {
     private Integer spicy;
     @Column
     private Integer sweet;
-//    @Column
-//    private Integer salty;
+    @Column
+    private Integer salty;
     @Column
     @Enumerated(EnumType.STRING)
     private UserState status;
-    private User(String email, String nickname, String gender, String ageRange, String profileImgUrl, Integer spicy, Integer sweet) {
+    private User(String email, String nickname, String gender, String ageRange, String profileImgUrl, Integer spicy, Integer sweet, Integer salty) {
         this.email = email;
         this.nickname = nickname;
         this.gender = gender;
@@ -46,12 +46,12 @@ public class User extends BaseEntity {
         this.profileImgUrl = profileImgUrl;
         this.spicy = spicy;
         this.sweet = sweet;
-//        this.salty = salty;
+        this.salty = salty;
         this.status = UserState.CREATING;
     }
 
     public static User newInstance(String email, String nickname, String gender, String ageRange, String profileImgUrl) {
-        return new User(email, nickname, gender, ageRange, profileImgUrl, null, null);
+        return new User(email, nickname, gender, ageRange, profileImgUrl, 0, 0, 0);
     }
 
     public void update(final User updateUser) {
@@ -63,7 +63,7 @@ public class User extends BaseEntity {
     public void updateTastyInfo(final UserSignUpTastyInfoRequest tastyInfoRequest) {
         updateSpicy(tastyInfoRequest.getSpicy());
         updateSweet(tastyInfoRequest.getSweet());
-//        updateSalty(tastyInfoRequest.getSalty());
+        updateSalty(tastyInfoRequest.getSalty());
     }
 
     public void updateNickname(final String nickname) {
@@ -95,11 +95,11 @@ public class User extends BaseEntity {
             this.sweet = sweet;
         }
     }
-//    public void updateSalty(final Integer salty) {
-//        if (salty != null) {
-//            this.salty = salty;
-//        }
-//    }
+    public void updateSalty(final Integer salty) {
+        if (salty != null) {
+            this.salty = salty;
+        }
+    }
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

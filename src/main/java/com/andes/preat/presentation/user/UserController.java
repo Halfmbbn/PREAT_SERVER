@@ -5,9 +5,7 @@ import com.andes.preat.dto.request.user.UpdateUserHateFoods;
 import com.andes.preat.dto.response.auth.NicknameCheckResponse;
 import com.andes.preat.dto.response.common.BaseResponse;
 import com.andes.preat.dto.response.hatefood.HateFoodsResponse;
-import com.andes.preat.dto.response.user.FollowsInfoResponse;
-import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
-import com.andes.preat.dto.response.user.UserStaticsResponse;
+import com.andes.preat.dto.response.user.*;
 import com.andes.preat.presentation.auth.Login;
 import com.andes.preat.presentation.auth.VerifiedMember;
 import com.andes.preat.service.auth.jwt.UserPayload;
@@ -59,9 +57,23 @@ public class UserController {
         return ResponseEntity.ok().body(new BaseResponse("ok"));
     }
     @GetMapping("/me")
-    public ResponseEntity<BaseResponse> getLoggedInUserInfo(@RequestParam final Long userPayload) {
-        UserStaticsResponse userInfo = userService.getLoggedInUserInfo(userPayload);
+    public ResponseEntity<BaseResponse> getLoggedInUserInfo(@VerifiedMember final UserPayload userPayload) {
+        UserStaticsResponse userInfo = userService.getLoggedInUserInfo(userPayload.getId());
         return ResponseEntity.ok().body(new BaseResponse(userInfo));
     }
-
+    @GetMapping("/me/most-visited")
+    public ResponseEntity<BaseResponse> getMostVisited(@VerifiedMember final UserPayload userPayload) {
+        List<MostVisitedCategoryResponse> userMostCategory = userService.findByUserMostCategory(userPayload.getId());
+        return ResponseEntity.ok().body(new BaseResponse(userMostCategory));
+    }
+    @GetMapping("/me/high-scored")
+    public ResponseEntity<BaseResponse> getHighScored(@VerifiedMember final UserPayload userPayload) {
+        List<HighScoredCategoryResponse> highScoredCategory = userService.findByUserHighScoredCategory(userPayload.getId());
+        return ResponseEntity.ok().body(new BaseResponse(highScoredCategory));
+    }
+    @GetMapping("/me/similar")
+    public ResponseEntity<BaseResponse> getSimilar(@RequestParam final Long userPayload) {
+        List<SimilarFollowsResponse> similarByUser = userService.findSimilarByUser(userPayload);
+        return ResponseEntity.ok().body(new BaseResponse(similarByUser));
+    }
 }

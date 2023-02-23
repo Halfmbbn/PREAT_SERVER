@@ -3,6 +3,7 @@ package com.andes.preat.dto.request.auth;
 import com.andes.preat.dto.request.review.ReviewWithRestaurantIdRequest;
 import lombok.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -18,8 +19,9 @@ public class UserSignUpRequest {
     private Integer sweet;
     @NotNull(message = "입맛 정보는 null 값이 될 수 없습니다.")
     private Integer spicy;
-//    @NotNull(message = "입맛 정보는 null 값이 될 수 없습니다.")
-//    private Integer salty;
+    @NotNull(message = "입맛 정보는 null 값이 될 수 없습니다.")
+    private Integer salty;
     private List<Long> hateFoods;
+    @Valid
     private List<ReviewWithRestaurantIdRequest> reviews;
 }

@@ -10,10 +10,10 @@ import java.util.List;
 public class UserSignUpTastyInfoRequest {
     private Integer sweet;
     private Integer spicy;
-    //private Integer salty;
+    private Integer salty;
 
     public static UserSignUpTastyInfoRequest from(UserSignUpRequest request) {
         return new UserSignUpTastyInfoRequest(request.getSweet(),
-                request.getSpicy());
+                request.getSpicy(), request.getSalty());
     }
 }
