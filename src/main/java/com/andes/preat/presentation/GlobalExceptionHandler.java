@@ -99,4 +99,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseExceptionResponse> handleUserWishNotFoundException(final UserWishNotFoundException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
     }
+    @ExceptionHandler(AlreadyRegisteredException.class)
+    public ResponseEntity<BaseExceptionResponse> handleAlreadyRegisteredException(final AlreadyRegisteredException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseExceptionResponse.of(e));
+    }
 }

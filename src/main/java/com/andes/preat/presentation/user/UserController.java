@@ -68,6 +68,10 @@ public class UserController {
         userHateFoodService.updateUserHateFoods(userPayload.getId(), request.getHateFoods());
         return ResponseEntity.ok().body(new BaseResponse("ok"));
     }
-
+    @GetMapping("/me/info/test")
+    public ResponseEntity<BaseResponse> getUserHateFoods(@RequestParam final Long userPayload) {
+        userService.calculateCategoryStatics(userPayload);
+        return ResponseEntity.ok().body(new BaseResponse(null));
+    }
 
 }

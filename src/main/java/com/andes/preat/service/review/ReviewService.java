@@ -14,11 +14,13 @@ import com.andes.preat.dto.request.review.ReviewListRequest;
 import com.andes.preat.dto.request.review.ReviewWithRestaurantIdRequest;
 import com.andes.preat.dto.response.restaurant.RestaurantInfoResponse;
 import com.andes.preat.dto.response.restaurant.RestaurantsResponse;
+import com.andes.preat.dto.response.user.FollowsRestaurantsResponse;
 import com.andes.preat.exception.badRequest.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -147,27 +149,35 @@ public class ReviewService {
         return restaurants;
     }
     // TODO: 팔로우한 사람들의 리뷰
-//    public RestaurantsResponse findByFollowsAndIsShownTrue(final Long userId) {
-//        User foundUser = findUserById(userId);
-//        List<Follow> follows = followRepository.findByFollower(foundUser);
-//        if (follows.isEmpty()) {
-//            return RestaurantsResponse.from(null);
-//        }
-//        List<Long> followingUserIds = follows.stream()
-//                .map(f -> f.getFollowing().getId())
-//                .collect(Collectors.toList());
-//        List<Review> reviews = reviewRepository.findAllByUserIdAndIsShownTrueAndRatingGreaterThanEqual(followingUserIds);
-//        if (reviews.isEmpty()) {
-//            return RestaurantsResponse.from(null);
-//        }
-//
-//    }
-//
-//    private RestaurantInfoResponse findReviewFromFollowers(final User foundUser, final Restaurant restaurant) {
-//        if (reviewRepository.existsByUserAndRestaurant(foundUser, restaurant)) {
-//            return RestaurantInfoResponse.from(restaurant, reviewRepository.findByUserAndRestaurant(foundUser, restaurant).get());
-//        }
-//        return RestaurantInfoResponse.from(restaurant, 3.3);
-//    }
+    public List<FollowsRestaurantsResponse> findByFollowsAndIsShownTrue(final Long userId) {
+        User foundUser = findUserById(userId);
+        // 팔로워 찾고
+        List<Follow> follows = followRepository.findByFollower(foundUser);
+        if (follows.isEmpty()) {
+            return null;
+        }
+        List<Long> followingUserIds = follows.stream()
+                .map(f -> f.getFollowing().getId())
+                .collect(Collectors.toList());
+        // 팔로워 리뷰 찾고
+        List<Review> reviews = reviewRepository.findAllByUserIdAndIsShownTrueAndRatingGreaterThanEqual(followingUserIds);
+        if (reviews.isEmpty()) {
+            return null;
+        }
+        return reviews.stream()
+                .map(r -> findRestaurantFromFollowers(foundUser, r))
+                .collect(Collectors.toList());
 
+    }
+    private FollowsRestaurantsResponse findRestaurantFromFollowers(final User me, final Review review) {
+        Restaurant foundRestaurant = review.getRestaurant();
+        RestaurantInfoResponse response = findMatchFromMyReview(me, foundRestaurant);
+        return FollowsRestaurantsResponse.from(review.getUser(), response);
+    }
+    private RestaurantInfoResponse findMatchFromMyReview(final User foundUser, final Restaurant foundRestaurant) {
+        if (reviewRepository.existsByUserAndRestaurant(foundUser, foundRestaurant)) {
+            return RestaurantInfoResponse.from(foundRestaurant, reviewRepository.findByUserAndRestaurant(foundUser, foundRestaurant).get());
+        }
+        return RestaurantInfoResponse.from(foundRestaurant, 3.3);
+    }
 }

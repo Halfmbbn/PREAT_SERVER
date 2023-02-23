@@ -40,6 +40,9 @@ INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url, catego
 INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url,category_id) values (default , '주소2', '맛집2', null , 2);
 INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url,category_id) values (default , '주소3', '맛집3', null , 3);
 INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url,category_id) values (default , '주소4', '맛집4', null , 4);
+INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url,category_id) values (default , '주소5', '맛집5', null , 4);
+INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url,category_id) values (default , '주소6', '맛집6', null , 4);
+
 
 -- ID CATEGORY_NAME
 -- --'한식', nan, '국밥', '중식당', '카레', '카페', '포장마차', '샌드위치', '카페,디저트',

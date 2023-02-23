@@ -8,6 +8,7 @@ import com.andes.preat.dto.request.review.ReviewsDeleteRequest;
 import com.andes.preat.dto.response.common.BaseResponse;
 import com.andes.preat.dto.response.restaurant.RestaurantInfoResponse;
 import com.andes.preat.dto.response.restaurant.RestaurantsResponse;
+import com.andes.preat.dto.response.user.FollowsRestaurantsResponse;
 import com.andes.preat.presentation.auth.Login;
 import com.andes.preat.presentation.auth.VerifiedMember;
 import com.andes.preat.service.auth.jwt.UserPayload;
@@ -96,9 +97,18 @@ public class ReviewController {
         return ResponseEntity.ok().body(new BaseResponse(responses));
     }
     // TODO: 친구의 리뷰 리스트 불러오기
-//    @GetMapping("/users/me/follows-list")
+    @GetMapping("/users/me/follows-list")
+    @Login
+    public ResponseEntity<BaseResponse> findFollowsList(@VerifiedMember final UserPayload userPayload) {
+        List<FollowsRestaurantsResponse> followsRestaurantsResponseList = reviewService.findByFollowsAndIsShownTrue(userPayload.getId());
+
+        return ResponseEntity.ok().body(new BaseResponse(followsRestaurantsResponseList));
+    }
+//    @GetMapping("/users/me/follows-list/test")
 //    public ResponseEntity<BaseResponse> findFollowsList(@RequestParam final Long userId) {
-//        return ResponseEntity.ok().body(new BaseResponse(null));
+//        List<FollowsRestaurantsResponse> followsRestaurantsResponseList = reviewService.findByFollowsAndIsShownTrue(userId);
+//
+//        return ResponseEntity.ok().body(new BaseResponse(followsRestaurantsResponseList));
 //    }
 
 }

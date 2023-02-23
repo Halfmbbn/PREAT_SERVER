@@ -1,5 +1,6 @@
 package com.andes.preat.service.user;
 
+import com.andes.preat.domain.category.CategoryRepository;
 import com.andes.preat.domain.follow.FollowRepository;
 import com.andes.preat.domain.review.Review;
 import com.andes.preat.domain.review.ReviewRepository;
@@ -12,6 +13,7 @@ import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
 import com.andes.preat.exception.badRequest.AlreadyFollowingException;
 import com.andes.preat.exception.badRequest.DuplicateNicknameException;
 import com.andes.preat.exception.badRequest.NotFoundUserException;
+import com.andes.preat.presentation.auth.Login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
     private final ReviewRepository reviewRepository;
+    private final CategoryRepository categoryRepository;
 
     // TODO : 내정보 확인하기
     @Transactional
@@ -47,11 +50,9 @@ public class UserService {
         return LoggedInUserInfoResponse.from(foundUser);
     }
 //    TODO: 유저 통계
-//    private void calculateCategoryStatics(User foundUser) {
-//        List<CategoryStaticsResponse> mostVisitedCategory = reviewRepository.findMostVisitedCategory(foundUser.getId());
-//        System.out.println("mostVisitedCategory = " + mostVisitedCategory);
-//        mostVisitedCategory.stream().forEach(c -> System.out.println("c.getCount() = " + c.getCount()));
-//    }
+    public void calculateCategoryStatics(Long userId) {
+        categoryRepository.findByUserGroupByCategory(userId);
+    }
 
     @Transactional
     public LoggedInUserInfoResponse updateLoggedInUserNickname(Long userId, String nickname) {
