@@ -2,6 +2,7 @@ package com.andes.preat.presentation.userwish;
 
 import com.andes.preat.dto.request.review.ReviewRequest;
 import com.andes.preat.dto.response.common.BaseResponse;
+import com.andes.preat.dto.response.restaurant.RestaurantInfoResponse;
 import com.andes.preat.dto.response.restaurant.RestaurantsResponse;
 import com.andes.preat.presentation.auth.Login;
 import com.andes.preat.presentation.auth.VerifiedMember;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,8 +50,8 @@ public class UserWishController {
     @GetMapping("/users/me/wishes")
     @Login
     public ResponseEntity<BaseResponse> getWishes(@VerifiedMember final UserPayload userPayload) {
-        RestaurantsResponse restaurantsResponse = userWishService.findAllByUser(userPayload.getId());
-        return ResponseEntity.ok().body(new BaseResponse(restaurantsResponse));
+        List<RestaurantInfoResponse> responses = userWishService.findAllByUser(userPayload.getId());
+        return ResponseEntity.ok().body(new BaseResponse(responses));
     }
 //    @GetMapping("/users/me/wishes/test")
 //    public ResponseEntity<BaseResponse> getWishes(@RequestParam final Long userId) {

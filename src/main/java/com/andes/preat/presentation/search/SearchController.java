@@ -2,6 +2,7 @@ package com.andes.preat.presentation.search;
 
 import com.andes.preat.dto.response.common.BaseResponse;
 import com.andes.preat.dto.response.hatefood.HateFoodsResponse;
+import com.andes.preat.dto.response.restaurant.RestaurantInfoResponse;
 import com.andes.preat.dto.response.search.SearchResponse;
 import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
 import com.andes.preat.presentation.auth.Login;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +38,12 @@ public class SearchController {
     @Login
     public ResponseEntity<BaseResponse> searchRestaurants(@VerifiedMember final UserPayload userPayload,
                                                           @RequestParam final String query) {
-        SearchResponse searchResponse = restaurantService.findByRestaurantNameContaining(userPayload.getId(), query);
-        return ResponseEntity.ok().body(new BaseResponse(searchResponse));
+        List<RestaurantInfoResponse> responses = restaurantService.findByRestaurantNameContaining(userPayload.getId(), query);
+        return ResponseEntity.ok().body(new BaseResponse(responses));
+    }
+    @GetMapping("/signup/search/restaurants")
+    public ResponseEntity<BaseResponse> searchRestaurantsWithNoToken(@RequestParam final String query) {
+        List<RestaurantInfoResponse> responses = restaurantService.findByRestaurantNameContainingByNoToken(query);
+        return ResponseEntity.ok().body(new BaseResponse(responses));
     }
 }

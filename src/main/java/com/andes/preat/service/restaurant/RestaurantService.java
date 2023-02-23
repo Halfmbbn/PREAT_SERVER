@@ -35,15 +35,23 @@ public class RestaurantService {
                 .collect(Collectors.toList());
         return restaurantInfoResponses;
     }
-    // TODO: 식당 음식 검색
-    public SearchResponse findByRestaurantNameContaining(final Long userId, final String keyword) {
+    // TODO: 식당 검색
+    public List<RestaurantInfoResponse> findByRestaurantNameContaining(final Long userId, final String keyword) {
         User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
         List<Restaurant> searchResults = restaurantRepository.findByNameContaining(keyword);
         if (searchResults.isEmpty()) {
-            return SearchResponse.from(Collections.emptyList());
+            return null;
         }
         List<RestaurantInfoResponse> responses = searchResults.stream().map(s -> findReviewAndMapToDto(foundUser, s)).collect(Collectors.toList());
-        return SearchResponse.from(responses);
+        return responses;
+    }
+    public List<RestaurantInfoResponse> findByRestaurantNameContainingByNoToken(final String keyword) {
+        List<Restaurant> searchResults = restaurantRepository.findByNameContaining(keyword);
+        if (searchResults.isEmpty()) {
+            return null;
+        }
+        List<RestaurantInfoResponse> responses = searchResults.stream().map(s -> RestaurantInfoResponse.from(s)).collect(Collectors.toList());
+        return responses;
     }
 
     private RestaurantInfoResponse findReviewAndMapToDto(final User foundUser, final Restaurant restaurant) {

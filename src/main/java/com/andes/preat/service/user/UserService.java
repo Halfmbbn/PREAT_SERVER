@@ -2,18 +2,15 @@ package com.andes.preat.service.user;
 
 import com.andes.preat.domain.category.CategoryRepository;
 import com.andes.preat.domain.follow.FollowRepository;
-import com.andes.preat.domain.review.Review;
 import com.andes.preat.domain.review.ReviewRepository;
 import com.andes.preat.domain.user.User;
 import com.andes.preat.domain.user.UserRepository;
-import com.andes.preat.dto.response.user.CategoryStaticsResponse;
 import com.andes.preat.dto.response.user.FollowUserInfoResponse;
 import com.andes.preat.dto.response.user.FollowsInfoResponse;
 import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
-import com.andes.preat.exception.badRequest.AlreadyFollowingException;
+import com.andes.preat.dto.response.user.MostVisitedCategoryResponse;
 import com.andes.preat.exception.badRequest.DuplicateNicknameException;
 import com.andes.preat.exception.badRequest.NotFoundUserException;
-import com.andes.preat.presentation.auth.Login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +48,7 @@ public class UserService {
     }
 //    TODO: 유저 통계
     public void calculateCategoryStatics(Long userId) {
-        categoryRepository.findByUserGroupByCategory(userId);
+        List<MostVisitedCategoryResponse> MVCategory = categoryRepository.findByUserMostCategory(userId);
     }
 
     @Transactional
@@ -68,12 +65,12 @@ public class UserService {
         }
     }
 
-    // TODO: 유저 닉네임으로 검색
+    // TODO: 유저 닉네임으로 검색 - DONE
     public LoggedInUserInfoResponse getUserByNickname(final String requestNickname) {
         User foundUser = userRepository.findByNickname(requestNickname).orElseThrow(() -> new NotFoundUserException());
         return LoggedInUserInfoResponse.from(foundUser);
     }
-    // TODO: 내 팔로우 목록 가져오기
+    // TODO: 내 팔로우 목록 가져오기 - DONE
     public FollowsInfoResponse getUserFollows(final Long userId) {
         User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
         if (!followRepository.existsByFollower(foundUser)) {

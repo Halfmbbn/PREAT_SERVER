@@ -7,20 +7,19 @@ import lombok.*;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class CategoryStaticsResponse {
+public class HighScoredCategoryResponse {
     private Long id;
     private String name;
     private String imageUrl;
-    private Long count;
+    private Double score;
 
-    public CategoryStaticsResponse(Long id, String name, Long count) {
+    public HighScoredCategoryResponse(Long id, String name, Double score) {
         this.id = id;
         this.name = name;
         this.imageUrl = null;
-        this.count = count;
+        this.score = score;
     }
-
-    public static CategoryStaticsResponse from(Category category) {
-        return new CategoryStaticsResponse(category.getId(), category.getName(), null, null);
+    public static HighScoredCategoryResponse from(Category category) {
+        return new HighScoredCategoryResponse(category.getId(), category.getName(), null, null);
     }
 }

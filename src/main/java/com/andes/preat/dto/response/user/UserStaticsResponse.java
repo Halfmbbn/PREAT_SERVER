@@ -10,11 +10,11 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserStaticsResponse {
     private LoggedInUserInfoResponse userInfo;
-    private List<CategoryStaticsResponse> mostVisted;
-    private List<CategoryStaticsResponse> highScored;
+    private List<MostVisitedCategoryResponse> mostVisted;
+    private List<MostVisitedCategoryResponse> highScored;
     private List<LoggedInUserInfoResponse> similar;
 
-    public static UserStaticsResponse from(LoggedInUserInfoResponse userInfo, List<CategoryStaticsResponse> mostVist, List<CategoryStaticsResponse> highScored, List<LoggedInUserInfoResponse> similar) {
+    public static UserStaticsResponse from(LoggedInUserInfoResponse userInfo, List<MostVisitedCategoryResponse> mostVist, List<MostVisitedCategoryResponse> highScored, List<LoggedInUserInfoResponse> similar) {
         return new UserStaticsResponse(userInfo, mostVist, highScored, similar);
     }
 }

@@ -1,9 +1,7 @@
 package com.andes.preat.domain.review;
 
-import com.andes.preat.domain.category.Category;
 import com.andes.preat.domain.restaurant.Restaurant;
 import com.andes.preat.domain.user.User;
-import com.andes.preat.dto.response.user.CategoryStaticsResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -89,14 +89,14 @@ public class UserWishService {
         userWishRepository.deleteAllByIdInQuery(requestIds);
     }
 
-    public RestaurantsResponse findAllByUser(final Long userId) {
+    public List<RestaurantInfoResponse> findAllByUser(final Long userId) {
         final User foundUser = findUserById(userId);
         // TODO: 유저 회원가입 체크
         List<UserWish> userWishes = userWishRepository.findAllByUser(foundUser);
         List<RestaurantInfoResponse> restaurantInfoResponses = userWishes.stream()
                 .map(u -> calculatePredict(foundUser, u.getRestaurant()))
                 .collect(Collectors.toList());
-        return RestaurantsResponse.from(restaurantInfoResponses);
+        return restaurantInfoResponses;
     }
 
     private RestaurantInfoResponse calculatePredict(User user, Restaurant restaurant) {
