@@ -134,17 +134,17 @@ public class ReviewService {
             }
         }
     }
-    public RestaurantsResponse findByUserAndIsShownTrue(final Long userId) {
+    public List<RestaurantInfoResponse> findByUserAndIsShownTrue(final Long userId) {
         User foundUser = findUserById(userId);
         List<Review> foundReviews = reviewRepository.findByUserAndIsShownTrueAndRatingGreaterThanEqual(foundUser,MYLIST_CUT_OFF_SCORE);
         if (foundReviews.isEmpty()) {
-            return RestaurantsResponse.from(null);
+            return null;
         }
         List<RestaurantInfoResponse> restaurants = foundReviews.stream()
                 .map(r -> RestaurantInfoResponse
                         .from(r.getRestaurant(), r))
                 .collect(Collectors.toList());
-        return RestaurantsResponse.from(restaurants);
+        return restaurants;
     }
     // TODO: 팔로우한 사람들의 리뷰
 //    public RestaurantsResponse findByFollowsAndIsShownTrue(final Long userId) {

@@ -6,6 +6,7 @@ import com.andes.preat.dto.request.review.ReviewRequest;
 import com.andes.preat.dto.request.review.ReviewListRequest;
 import com.andes.preat.dto.request.review.ReviewsDeleteRequest;
 import com.andes.preat.dto.response.common.BaseResponse;
+import com.andes.preat.dto.response.restaurant.RestaurantInfoResponse;
 import com.andes.preat.dto.response.restaurant.RestaurantsResponse;
 import com.andes.preat.presentation.auth.Login;
 import com.andes.preat.presentation.auth.VerifiedMember;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -90,8 +92,8 @@ public class ReviewController {
     @GetMapping("/users/me/mylist")
     @Login
     public ResponseEntity<BaseResponse> findMyList(@VerifiedMember final UserPayload userPayload) {
-        RestaurantsResponse restaurantsResponse = reviewService.findByUserAndIsShownTrue(userPayload.getId());
-        return ResponseEntity.ok().body(new BaseResponse(restaurantsResponse));
+        List<RestaurantInfoResponse> responses = reviewService.findByUserAndIsShownTrue(userPayload.getId());
+        return ResponseEntity.ok().body(new BaseResponse(responses));
     }
     // TODO: 친구의 리뷰 리스트 불러오기
 //    @GetMapping("/users/me/follows-list")
