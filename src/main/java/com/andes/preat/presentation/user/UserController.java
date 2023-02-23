@@ -72,8 +72,8 @@ public class UserController {
         return ResponseEntity.ok().body(new BaseResponse(highScoredCategory));
     }
     @GetMapping("/me/similar")
-    public ResponseEntity<BaseResponse> getSimilar(@RequestParam final Long userPayload) {
-        List<SimilarFollowsResponse> similarByUser = userService.findSimilarByUser(userPayload);
+    public ResponseEntity<BaseResponse> getSimilar(@VerifiedMember final UserPayload userPayload) {
+        List<SimilarFollowsResponse> similarByUser = userService.findSimilarByUser(userPayload.getId());
         return ResponseEntity.ok().body(new BaseResponse(similarByUser));
     }
 }
