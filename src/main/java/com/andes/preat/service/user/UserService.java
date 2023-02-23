@@ -1,8 +1,11 @@
 package com.andes.preat.service.user;
 
 import com.andes.preat.domain.follow.FollowRepository;
+import com.andes.preat.domain.review.Review;
+import com.andes.preat.domain.review.ReviewRepository;
 import com.andes.preat.domain.user.User;
 import com.andes.preat.domain.user.UserRepository;
+import com.andes.preat.dto.response.user.CategoryStaticsResponse;
 import com.andes.preat.dto.response.user.FollowUserInfoResponse;
 import com.andes.preat.dto.response.user.FollowsInfoResponse;
 import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
@@ -22,6 +25,7 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final ReviewRepository reviewRepository;
 
     // TODO : 내정보 확인하기
     @Transactional
@@ -39,8 +43,15 @@ public class UserService {
 
     public LoggedInUserInfoResponse getLoggedInUserInfo(final Long userId) {
         User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
+//        calculateCategoryStatics(foundUser);
         return LoggedInUserInfoResponse.from(foundUser);
     }
+//    TODO: 유저 통계
+//    private void calculateCategoryStatics(User foundUser) {
+//        List<CategoryStaticsResponse> mostVisitedCategory = reviewRepository.findMostVisitedCategory(foundUser.getId());
+//        System.out.println("mostVisitedCategory = " + mostVisitedCategory);
+//        mostVisitedCategory.stream().forEach(c -> System.out.println("c.getCount() = " + c.getCount()));
+//    }
 
     @Transactional
     public LoggedInUserInfoResponse updateLoggedInUserNickname(Long userId, String nickname) {

@@ -9,5 +9,5 @@ import lombok.*;
 public class FollowUserInfoResponse {
     private Long id;
     private String nickname;
-    private String profileImgUrl;
+    private String imageUrl;
 }

@@ -36,10 +36,10 @@ INSERT INTO category (id, category_name) values (default , '카페,디저트');
 INSERT INTO category (id, category_name) values (default , '이탈리아음식');
 
 -- ID  	ADDRESS  	RESTAURANT_NAME  	RESTAURANT_IMG_URL  	CATEGORY_ID
-INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url, category_id) values (default , '주소1', '맛집1', '이미지1', 1);
-INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url,category_id) values (default , '주소2', '맛집2', '이미지2', 2);
-INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url,category_id) values (default , '주소3', '맛집3', '이미지3', 3);
-INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url,category_id) values (default , '주소4', '맛집4', '이미지4', 4);
+INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url, category_id) values (default , '주소1', '맛집1', null , 1);
+INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url,category_id) values (default , '주소2', '맛집2', null , 2);
+INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url,category_id) values (default , '주소3', '맛집3', null , 3);
+INSERT INTO restaurant (id, address, restaurant_name, restaurant_img_url,category_id) values (default , '주소4', '맛집4', null , 4);
 
 -- ID CATEGORY_NAME
 -- --'한식', nan, '국밥', '중식당', '카레', '카페', '포장마차', '샌드위치', '카페,디저트',

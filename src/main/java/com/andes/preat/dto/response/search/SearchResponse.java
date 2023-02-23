@@ -14,7 +14,7 @@ public class SearchResponse {
 
     public static SearchResponse from(List<?> results) {
         if (results.isEmpty()) {
-            return new SearchResponse(false, results);
+            return new SearchResponse(false, null);
         }
         return new SearchResponse(true, results);
     }

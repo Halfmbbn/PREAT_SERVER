@@ -1,5 +1,7 @@
 package com.andes.preat.service.review;
 
+import com.andes.preat.domain.follow.Follow;
+import com.andes.preat.domain.follow.FollowRepository;
 import com.andes.preat.domain.restaurant.Restaurant;
 import com.andes.preat.domain.restaurant.RestaurantRepository;
 import com.andes.preat.domain.review.Review;
@@ -10,6 +12,8 @@ import com.andes.preat.domain.userwish.UserWishRepository;
 import com.andes.preat.dto.request.review.ReviewRequest;
 import com.andes.preat.dto.request.review.ReviewListRequest;
 import com.andes.preat.dto.request.review.ReviewWithRestaurantIdRequest;
+import com.andes.preat.dto.response.restaurant.RestaurantInfoResponse;
+import com.andes.preat.dto.response.restaurant.RestaurantsResponse;
 import com.andes.preat.exception.badRequest.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,10 +26,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ReviewService {
+    private final static double MYLIST_CUT_OFF_SCORE = 3.0;
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
     private final UserWishRepository userWishRepository;
+    private final FollowRepository followRepository;
 
     @Transactional
     public Long saveReview(final Long restaurantId, final Long userId,
@@ -70,24 +76,12 @@ public class ReviewService {
         }
     }
     @Transactional
-    public void saveReviewsWithList(final Long userId,
-                           final List<ReviewWithRestaurantIdRequest> reviews) {
-        final User foundUser = findUserById(userId);
+    public void saveReviewsWithList(final List<ReviewWithRestaurantIdRequest> reviews, final User foundUser) {
         validateRegisterCompleted(foundUser);
-        saveReviewsWithList(reviews, foundUser);
-    }
-    @Transactional
-    public void saveReviewsWithList(final User foundUser,
-                                    final List<ReviewWithRestaurantIdRequest> reviews) {
-//        final User foundUser = findUserById(userId);
-        validateRegisterCompleted(foundUser);
-        saveReviewsWithList(reviews, foundUser);
-    }
-    private void saveReviewsWithList(final List<ReviewWithRestaurantIdRequest> reviews, final User user) {
         for (ReviewWithRestaurantIdRequest rev : reviews) {
             Restaurant restaurant = findRestaurantById(rev.getRestaurantId());
-            validateNotWritten(user, restaurant);
-            final Review review = rev.toReview(user, restaurant);
+            validateNotWritten(foundUser, restaurant);
+            final Review review = rev.toReview(foundUser, restaurant);
             reviewRepository.save(review);
         }
     }
@@ -96,8 +90,6 @@ public class ReviewService {
         final Review foundReview = findTarget(restaurantId, userId);
         final Review updateReview = updateRequest.toReview(foundReview.getUser(), foundReview.getRestaurant());
         foundReview.update(updateReview);
-//        int ratingGap = updateReview.getRating() - target.getRating();
-//        productRepository.updateProductStatisticsForReviewUpdate(target.getProduct().getId(), ratingGap);
     }
     private Review findTarget(final Long restaurantId, final Long userId) {
         final User foundUser = findUserById(userId);
@@ -115,11 +107,11 @@ public class ReviewService {
             throw new NotAuthorException();
         }
     }
+    // 레코드 삭제
     @Transactional
     public void delete(final Long restaurantId, final Long userId) {
-        final Review review = findTarget(restaurantId, userId);
-        reviewRepository.delete(review);
-//        productRepository.updateProductStatisticsForReviewDelete(review.getProduct().getId(), review.getRating());
+        final Review foundReview = findTarget(restaurantId, userId);
+        reviewRepository.delete(foundReview);
     }
     @Transactional
     public void deleteAllByUserIdAndRestaurantIdIn(final List<Long> restaurantIds, final Long userId) {
@@ -128,4 +120,54 @@ public class ReviewService {
             System.out.println("deletes = " + deletes);
         }
     }
+    @Transactional
+    public void deleteFromMylist(final Long restaurantId, final Long userId) {
+        final Review foundReview = findTarget(restaurantId, userId);
+        foundReview.deleteFromMylist();
+    }
+    @Transactional
+    public void deleteAllFromMylistByUserIdAndRestaurantIdIn(final List<Long> restaurantIds, final Long userId) {
+        if (!restaurantIds.isEmpty()) {
+            for (Long restaurantId: restaurantIds) {
+                Review foundReview = findTarget(restaurantId, userId);
+                foundReview.deleteFromMylist();
+            }
+        }
+    }
+    public RestaurantsResponse findByUserAndIsShownTrue(final Long userId) {
+        User foundUser = findUserById(userId);
+        List<Review> foundReviews = reviewRepository.findByUserAndIsShownTrueAndRatingGreaterThanEqual(foundUser,MYLIST_CUT_OFF_SCORE);
+        if (foundReviews.isEmpty()) {
+            return RestaurantsResponse.from(null);
+        }
+        List<RestaurantInfoResponse> restaurants = foundReviews.stream()
+                .map(r -> RestaurantInfoResponse
+                        .from(r.getRestaurant(), r))
+                .collect(Collectors.toList());
+        return RestaurantsResponse.from(restaurants);
+    }
+    // TODO: 팔로우한 사람들의 리뷰
+//    public RestaurantsResponse findByFollowsAndIsShownTrue(final Long userId) {
+//        User foundUser = findUserById(userId);
+//        List<Follow> follows = followRepository.findByFollower(foundUser);
+//        if (follows.isEmpty()) {
+//            return RestaurantsResponse.from(null);
+//        }
+//        List<Long> followingUserIds = follows.stream()
+//                .map(f -> f.getFollowing().getId())
+//                .collect(Collectors.toList());
+//        List<Review> reviews = reviewRepository.findAllByUserIdAndIsShownTrueAndRatingGreaterThanEqual(followingUserIds);
+//        if (reviews.isEmpty()) {
+//            return RestaurantsResponse.from(null);
+//        }
+//
+//    }
+//
+//    private RestaurantInfoResponse findReviewFromFollowers(final User foundUser, final Restaurant restaurant) {
+//        if (reviewRepository.existsByUserAndRestaurant(foundUser, restaurant)) {
+//            return RestaurantInfoResponse.from(restaurant, reviewRepository.findByUserAndRestaurant(foundUser, restaurant).get());
+//        }
+//        return RestaurantInfoResponse.from(restaurant, 3.3);
+//    }
+
 }

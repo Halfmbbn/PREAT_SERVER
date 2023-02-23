@@ -62,29 +62,6 @@ public class UserWishService {
             throw new AlreadyWrittenUserWishException();
         }
     }
-//    @Transactional
-//    public void saveReviewsWithList(final Long userId,
-//                                    final ReviewListRequest reviewListRequest) {
-//        final User foundUser = findUserById(userId);
-//        validateRegisterCompleted(foundUser);
-//        saveReviewsWithList(reviewListRequest.getReviews(), foundUser);
-//    }
-//    private void saveReviewsWithList(final List<ReviewWithRestaurantIdRequest> reviews, final User user) {
-//        for (ReviewWithRestaurantIdRequest rev : reviews) {
-//            Restaurant restaurant = findRestaurantById(rev.getRestaurantId());
-//            validateNotWritten(user, restaurant);
-//            final Review review = rev.toReview(user, restaurant);
-//            reviewRepository.save(review);
-//        }
-//    }
-//    @Transactional
-//    public void update(final Long restaurantId, final Long userId) {
-//        UserWish foundUserWish = findTarget(restaurantId, userId);
-//        UserWish updateUserWish = UserWish.from(foundUserWish.getUser(), foundUserWish.getRestaurant());
-//        foundUserWish.update(updateUserWish);
-////        int ratingGap = updateReview.getRating() - target.getRating();
-////        productRepository.updateProductStatisticsForReviewUpdate(target.getProduct().getId(), ratingGap);
-//    }
     private UserWish findTarget(final Long restaurantId, final Long userId) {
         final User foundUser = findUserById(userId);
         final Restaurant foundRestaurant = findRestaurantById(restaurantId);
@@ -105,17 +82,16 @@ public class UserWishService {
     public void delete(final Long restaurantId, final Long userId) {
         UserWish foundUserWish = findTarget(restaurantId, userId);
         userWishRepository.delete(foundUserWish);
-//        productRepository.updateProductStatisticsForReviewDelete(review.getProduct().getId(), review.getRating());
     }
     // ID List로 삭제
     @Transactional
     public void deleteAllByIdIn(final Long userId, final List<Long> requestIds) {
         userWishRepository.deleteAllByIdInQuery(requestIds);
-//        productRepository.updateProductStatisticsForReviewDelete(review.getProduct().getId(), review.getRating());
     }
 
     public RestaurantsResponse findAllByUser(final Long userId) {
         final User foundUser = findUserById(userId);
+        // TODO: 유저 회원가입 체크
         List<UserWish> userWishes = userWishRepository.findAllByUser(foundUser);
         List<RestaurantInfoResponse> restaurantInfoResponses = userWishes.stream()
                 .map(u -> calculatePredict(foundUser, u.getRestaurant()))

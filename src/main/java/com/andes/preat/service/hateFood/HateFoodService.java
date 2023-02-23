@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class HateFoodService {
     private final HateFoodRepository hateFoodRepository;
 
-    // TODO : 싫어하는 음식 선택지 조회 - DONE
     public List<HateFoodsResponse> getHateFoods() {
         List<HateFood> hateFoods = hateFoodRepository.findAll();
         List<HateFoodsResponse> hateFoodsResponses = hateFoods.stream()
@@ -27,15 +26,14 @@ public class HateFoodService {
                 .collect(Collectors.toList());
         return hateFoodsResponses;
     }
-    // TODO: 싫어하는 음식 검색 - DONE
-    public SearchResponse findByFoodContaining(final String searchWord) {
+    public List<HateFoodsResponse> findByFoodContaining(final String searchWord) {
         List<HateFood> searchResults = hateFoodRepository.findByFoodContaining(searchWord);
         if (searchResults.isEmpty()) {
-            return SearchResponse.from(Collections.emptyList());
+            return null;
         }
         List<HateFoodsResponse> hateFoodsResponses = searchResults.stream()
                 .map(hf -> HateFoodsResponse.from(hf))
                 .collect(Collectors.toList());
-        return SearchResponse.from(hateFoodsResponses);
+        return hateFoodsResponses;
     }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class ReviewsDeleteRequest {
-    private List<Long> restaurantId;
+    private List<Long> ids;
 }

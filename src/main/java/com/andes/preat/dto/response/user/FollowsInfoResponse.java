@@ -12,7 +12,7 @@ import java.util.List;
 public class FollowsInfoResponse {
     private Long id;
     private String nickname;
-    private String profileImgUrl;
+    private String imageUrl;
     private List<FollowUserInfoResponse> follows;
 
     public static FollowsInfoResponse from(User foundUser, List<FollowUserInfoResponse> responses) {

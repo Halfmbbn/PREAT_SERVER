@@ -45,7 +45,6 @@ public class AuthService {
         String applicationAccessToken = jwtProvider.createAccessToken(loggedInUser.getId());
         return LoginResponse.from(isNewUser, applicationAccessToken);
     }
-    // TODO: 별점 update - DONE
     @Transactional
     public void signUp(final Long userId, final UserSignUpRequest request) {
         User foundUser = userRepository.findById(userId)
@@ -57,7 +56,8 @@ public class AuthService {
 
     private void updateUserReview(User foundUser, List<ReviewWithRestaurantIdRequest> reviews) {
         // WARN: registered 값이 바로 안바뀌면 동시성 이슈가 있을 수도 있음.
-        reviewService.saveReviewsWithList(foundUser, reviews);
+        reviewService.saveReviewsWithList(reviews, foundUser);
+        // TODO: 가봐야 할 맛집에서 삭제
     }
 
     private void updateUserInfo(User foundUser, UserSignUpRequest request) {

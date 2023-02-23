@@ -22,6 +22,8 @@ public class Review extends BaseEntity {
     private Long id;
     @Column
     private Double rating;
+    @Column
+    private Boolean isShown;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -34,6 +36,7 @@ public class Review extends BaseEntity {
         this.rating = rating;
         this.user = user;
         this.restaurant = restaurant;
+        this.isShown = true;
     }
     public static Review from(Double rating, User user, Restaurant restaurant) {
         return new Review(rating, user, restaurant);
@@ -42,6 +45,9 @@ public class Review extends BaseEntity {
         if (rating < MINIMUM_RATING || rating > MAXIMUM_RATING) {
             throw new InvalidRatingValueException();
         }
+    }
+    public void deleteFromMylist() {
+        this.isShown = false;
     }
     public boolean isWrittenBy(User user) {
         return this.user.equals(user);

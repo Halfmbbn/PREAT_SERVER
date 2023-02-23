@@ -10,7 +10,7 @@ import lombok.*;
 public class HateFoodsResponse {
     private Long id;
     private String food;
-    private String imgUrl;
+    private String imageUrl;
 
     public static HateFoodsResponse from(final HateFood hateFood) {
         return new HateFoodsResponse(hateFood.getId(), hateFood.getFood(), hateFood.getImgUrl());

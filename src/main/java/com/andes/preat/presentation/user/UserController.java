@@ -24,7 +24,6 @@ import java.util.List;
 @RequestMapping("/v1/users")
 public class UserController {
     private final UserService userService;
-    private final FollowService followService;
     private final UserHateFoodService userHateFoodService;
 
     @GetMapping("/usermakefortest")
@@ -36,6 +35,11 @@ public class UserController {
     @Login
     public ResponseEntity<BaseResponse> getLoggedInUserInfo(@VerifiedMember final UserPayload userPayload) {
         LoggedInUserInfoResponse loggedInUserInfo = userService.getLoggedInUserInfo(userPayload.getId());
+        return ResponseEntity.ok().body(new BaseResponse(loggedInUserInfo));
+    }
+    @GetMapping("/me/test")
+    public ResponseEntity<BaseResponse> getLoggedInUserInfoTest(@RequestParam final Long userPayload) {
+        LoggedInUserInfoResponse loggedInUserInfo = userService.getLoggedInUserInfo(userPayload);
         return ResponseEntity.ok().body(new BaseResponse(loggedInUserInfo));
     }
     @PatchMapping("/me")

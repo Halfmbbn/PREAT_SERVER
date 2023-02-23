@@ -11,7 +11,7 @@ import lombok.*;
 public class LoggedInUserInfoResponse {
     private Long id;
     private String nickname;
-    private String profileImgUrl;
+    private String imageUrl;
 
     public static LoggedInUserInfoResponse from(User loggedInUser) {
         return new LoggedInUserInfoResponse(loggedInUser.getId(),

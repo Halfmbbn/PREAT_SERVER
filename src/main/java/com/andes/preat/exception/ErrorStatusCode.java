@@ -10,7 +10,7 @@ public enum ErrorStatusCode {
     RESTAURANT_NOT_FOUND(400, "식당 정보를 찾을 수 없습니다."),
     REVIEWS_NOT_AUTHOR(400, "작성자가 아닙니다."),
     REVIEWS_NOT_FOUND(400,"별점 정보를 찾을 수 없습니다."),
-    REVIEWS_ALREADY_EXISTS(400, "이미 평가한 식당입니다."),
+    REVIEWS_ALREADY_EXISTS(400, "중복된 평가입니다."),
     REVIEWS_INVALID_RATING_VALUE(400, "별점 값은 0.0 부터 5.0 사이입니다."),
     METHOD_ARGUMENT_NOT_VALID(400, "RequestBody 또는 RequestParam을 확인해주세요."),
     HATE_FOOD_NOT_FOUND(400, "해당 싫어하는 음식을 찾을 수 없습니다."),

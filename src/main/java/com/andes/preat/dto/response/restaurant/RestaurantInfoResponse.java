@@ -9,17 +9,14 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RestaurantInfoResponse {
-    private Long restaurantId;
-    private String restaurantName;
+    private Long id;
+    private String name;
     private String address;
-    private String imgUrl;
+    private String imageUrl;
     private String category;
     private Double latitude;
     private Double longitude;
-    private Boolean hasPredict;
-    private Double rating;
-    private Double predictRating;
-
+    private RestaurantRatingResponse rating;
     // review가 존재
     public static RestaurantInfoResponse from(Restaurant restaurant, Review review) {
         return new RestaurantInfoResponse(restaurant.getId(),
@@ -29,9 +26,7 @@ public class RestaurantInfoResponse {
                 restaurant.getCategory().getName(),
                 restaurant.getLatitude(),
                 restaurant.getLongitude(),
-                false,
-                review.getRating(),
-                null);
+                RestaurantRatingResponse.from(false, review.getRating()));
     }
     // 예상별점이 있을 때
     public static RestaurantInfoResponse from(Restaurant restaurant, Double predictRating) {
@@ -42,9 +37,7 @@ public class RestaurantInfoResponse {
                 restaurant.getCategory().getName(),
                 restaurant.getLatitude(),
                 restaurant.getLongitude(),
-                true,
-                null,
-                predictRating);
+                RestaurantRatingResponse.from(true, predictRating));
     }
     // 아무것도 없을 때
     public static RestaurantInfoResponse from(Restaurant restaurant) {
@@ -55,8 +48,6 @@ public class RestaurantInfoResponse {
                 restaurant.getCategory().getName(),
                 restaurant.getLatitude(),
                 restaurant.getLongitude(),
-                false,
-                null,
                 null);
     }
 }

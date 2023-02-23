@@ -30,7 +30,12 @@ public class UserWishController {
         final Long reviewId = userWishService.saveUserWish(restaurantId, userPayload.getId());
         return ResponseEntity.ok().body(new BaseResponse(null));
     }
-
+//    @PostMapping("/restaurants/{restaurantId}/wishes/test")
+//    public ResponseEntity<BaseResponse> create(@RequestParam final Long userId ,
+//                                               @PathVariable final Long restaurantId) {
+//        final Long reviewId = userWishService.saveUserWish(restaurantId, userId);
+//        return ResponseEntity.ok().body(new BaseResponse(null));
+//    }
     // 단건 가봐야 할 맛집 삭제
     @DeleteMapping("/restaurants/{restaurantId}/wishes")
     @Login
@@ -39,11 +44,16 @@ public class UserWishController {
         userWishService.delete(restaurantId, userPayload.getId());
         return ResponseEntity.ok().body(new BaseResponse(null));
     }
-    // 가봐야 할 맛집 리스트 조회 - 예상별점 어떻게?
+//     가봐야 할 맛집 리스트 조회 - 예상별점 어떻게?
     @GetMapping("/users/me/wishes")
     @Login
     public ResponseEntity<BaseResponse> getWishes(@VerifiedMember final UserPayload userPayload) {
         RestaurantsResponse restaurantsResponse = userWishService.findAllByUser(userPayload.getId());
         return ResponseEntity.ok().body(new BaseResponse(restaurantsResponse));
     }
+//    @GetMapping("/users/me/wishes/test")
+//    public ResponseEntity<BaseResponse> getWishes(@RequestParam final Long userId) {
+//        RestaurantsResponse restaurantsResponse = userWishService.findAllByUser(userId);
+//        return ResponseEntity.ok().body(new BaseResponse(restaurantsResponse));
+//    }
 }

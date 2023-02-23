@@ -4,6 +4,9 @@ import com.andes.preat.dto.response.common.BaseResponse;
 import com.andes.preat.dto.response.hatefood.HateFoodsResponse;
 import com.andes.preat.dto.response.search.SearchResponse;
 import com.andes.preat.dto.response.user.LoggedInUserInfoResponse;
+import com.andes.preat.presentation.auth.Login;
+import com.andes.preat.presentation.auth.VerifiedMember;
+import com.andes.preat.service.auth.jwt.UserPayload;
 import com.andes.preat.service.hateFood.HateFoodService;
 import com.andes.preat.service.restaurant.RestaurantService;
 import com.andes.preat.service.user.UserService;
@@ -21,22 +24,18 @@ public class SearchController {
     private final UserService userService;
     private final HateFoodService hateFoodService;
     private final RestaurantService restaurantService;
-    // 유저 닉네임 검색
+    // 유저 닉네임 검색 -> 검색으로 전환 필요
     @GetMapping("/search/users")
-    public ResponseEntity<BaseResponse> getUserByNickname(@RequestParam final String keyword) {
-        LoggedInUserInfoResponse foundUser = userService.getUserByNickname(keyword);
+    public ResponseEntity<BaseResponse> getUserByNickname(@RequestParam final String query) {
+        LoggedInUserInfoResponse foundUser = userService.getUserByNickname(query);
         return ResponseEntity.ok().body(new BaseResponse(foundUser));
-    }
-    // 싫어하는 음식 검색
-    @GetMapping("/search/dislikes")
-    public ResponseEntity<BaseResponse> searchHateFoods(@RequestParam final String keyword) {
-        SearchResponse searchResponse = hateFoodService.findByFoodContaining(keyword);
-        return ResponseEntity.ok().body(new BaseResponse(searchResponse));
     }
     // 식당 검색
     @GetMapping("/search/restaurants")
-    public ResponseEntity<BaseResponse> searchRestaurants(@RequestParam final String keyword) {
-        SearchResponse searchResponse = restaurantService.findByRestaurantNameContaining(keyword);
+    @Login
+    public ResponseEntity<BaseResponse> searchRestaurants(@VerifiedMember final UserPayload userPayload,
+                                                          @RequestParam final String query) {
+        SearchResponse searchResponse = restaurantService.findByRestaurantNameContaining(userPayload.getId(), query);
         return ResponseEntity.ok().body(new BaseResponse(searchResponse));
     }
 }

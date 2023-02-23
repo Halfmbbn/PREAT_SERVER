@@ -21,7 +21,7 @@ public interface UserWishRepository extends JpaRepository<UserWish, Long> {
 //    @Query("select r from Review r join fetch r.member join fetch r.product where r.member.id = :memberId")
 //    Slice<Review> findPageByMemberId(Long memberId, Pageable pageable);
     @Query("select u from UserWish u join fetch u.restaurant where u.user = :user")
-    List<UserWish> findAllByUser(User user);
+    List<UserWish> findAllByUser(@Param("user") User user);
 
     void deleteByUserAndRestaurant(User user, Restaurant restaurant);
 }
