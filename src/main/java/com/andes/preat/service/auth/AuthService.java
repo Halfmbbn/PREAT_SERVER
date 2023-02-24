@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @Service
@@ -33,6 +34,7 @@ public class AuthService {
     private final UserHateFoodService userHateFoodService;
     private final ReviewService reviewService;
     private final JwtProvider jwtProvider;
+    private final EntityManager entityManager;
     @Transactional
     public LoginResponse loginUser(final String code) {
         System.out.println("code = " + code);
@@ -46,6 +48,8 @@ public class AuthService {
             User foundUser = userRepository.findByEmail(testEmail).orElseThrow(() -> new NotFoundUserException());
 //            TODO: for test should delete
             foundUser.Testing();
+            entityManager.flush();
+            entityManager.clear();
 //            TODO: for test should delete
             userHateFoodService.forTest(foundUser);
 //            TODO: for test should delete
