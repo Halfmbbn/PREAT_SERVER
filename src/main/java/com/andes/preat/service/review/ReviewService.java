@@ -180,4 +180,8 @@ public class ReviewService {
         }
         return RestaurantInfoResponse.from(foundRestaurant, 3.3);
     }
+
+    public void forTest(final User user) {
+        reviewRepository.deleteAllByUser(user);
+    }
 }

@@ -39,6 +39,19 @@ public class AuthService {
         // kakao 조회
         String accessToken = "Bearer " + code;
         KakaoProfileResponse profileInfo = kakaoAuthClient.getProfileInfo(accessToken, "application/x-www/form-urlencoded");
+
+        // TODO: for test should delete
+        String testEmail = profileInfo.getKakaoAccount().getEmail();
+        if (testEmail.equals("dnjstjr245@naver.com")) {
+            User foundUser = userRepository.findByEmail(testEmail).orElseThrow(() -> new NotFoundUserException());
+//            TODO: for test should delete
+            foundUser.Testing();
+//            TODO: for test should delete
+            userHateFoodService.forTest(foundUser);
+//            TODO: for test should delete
+            reviewService.forTest(foundUser);
+        }
+
         // 내 db 에서 확인
         boolean isNewUser = !checkUserExistAndRegistered(profileInfo);
         // 불린 값

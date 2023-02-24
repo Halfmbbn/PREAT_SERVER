@@ -124,4 +124,7 @@ public class User extends BaseEntity {
         }
         return true;
     }
+    public void Testing() {
+        this.status = UserState.CREATING;
+    }
 }

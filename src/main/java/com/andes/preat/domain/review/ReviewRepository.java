@@ -24,4 +24,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 //    @Query("select new com.andes.preat.dto.response.user.CategoryStaticsResponse(c.id,c.name,count(c.id)) " +
 //            "from Review r join fetch r.restaurant res join fetch res.category c group by c.id order by count(c.id) desc ")
 //    List<CategoryStaticsResponse> findMostVisitedCategory(@Param("userId") Long userId);
+    void deleteAllByUser(final User user);
 }

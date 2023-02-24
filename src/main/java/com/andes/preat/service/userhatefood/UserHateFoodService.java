@@ -66,4 +66,8 @@ public class UserHateFoodService {
         User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundUserException());
         addUserHateFoods(foundUser, hateFoods);
     }
+    @Transactional
+    public void forTest(final User user) {
+        userHateFoodRepository.deleteAllByUser(user);
+    }
 }
