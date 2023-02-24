@@ -54,8 +54,8 @@ public class UserWishController {
         return ResponseEntity.ok().body(new BaseResponse(responses));
     }
 //    @GetMapping("/users/me/wishes/test")
-//    public ResponseEntity<BaseResponse> getWishes(@RequestParam final Long userId) {
-//        RestaurantsResponse restaurantsResponse = userWishService.findAllByUser(userId);
+//    public ResponseEntity<BaseResponse> getWishesTest(@RequestParam final Long userId) {
+//        List<RestaurantInfoResponse> restaurantsResponse = userWishService.findAllByUser(userId);
 //        return ResponseEntity.ok().body(new BaseResponse(restaurantsResponse));
 //    }
 }

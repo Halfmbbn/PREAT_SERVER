@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,6 +94,9 @@ public class UserWishService {
         final User foundUser = findUserById(userId);
         // TODO: 유저 회원가입 체크
         List<UserWish> userWishes = userWishRepository.findAllByUser(foundUser);
+        if (userWishes.isEmpty()) {
+            return null;
+        }
         List<RestaurantInfoResponse> restaurantInfoResponses = userWishes.stream()
                 .map(u -> calculatePredict(foundUser, u.getRestaurant()))
                 .collect(Collectors.toList());
@@ -100,7 +104,11 @@ public class UserWishService {
     }
 
     private RestaurantInfoResponse calculatePredict(User user, Restaurant restaurant) {
+        Random random = new Random();
+        int i = random.nextInt(2) + 3;
+        double v = random.nextDouble();
+        Double value = Math.round((i+v)*10)/10.0;
         // TODO : 예상 별점 로직 추가
-        return RestaurantInfoResponse.from(restaurant, 3.3);
+        return RestaurantInfoResponse.from(restaurant, value);
     }
 }
