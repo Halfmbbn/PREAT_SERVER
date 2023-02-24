@@ -10,6 +10,7 @@ import com.andes.preat.dto.request.review.ReviewWithRestaurantIdRequest;
 import com.andes.preat.dto.response.auth.LoginResponse;
 import com.andes.preat.dto.response.auth.NicknameCheckResponse;
 import com.andes.preat.dto.response.auth.kakao.KakaoProfileResponse;
+import com.andes.preat.dto.response.auth.signupResponse;
 import com.andes.preat.exception.badRequest.AlreadyRegisteredException;
 import com.andes.preat.exception.badRequest.DuplicateNicknameException;
 import com.andes.preat.exception.badRequest.NotFoundUserException;
@@ -48,13 +49,15 @@ public class AuthService {
         return LoginResponse.from(isNewUser, applicationAccessToken);
     }
     @Transactional
-    public void signUp(final Long userId, final UserSignUpRequest request) {
+    public signupResponse signUp(final Long userId, final UserSignUpRequest request) {
         User foundUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundUserException());
         validateNotRegistered(foundUser);
         updateUserInfo(foundUser, request);
         userHateFoodService.updateUserHateFoods(userId, request.getHateFoods());
         updateUserReview(foundUser, request.getReviews());
+        String applicationAccessToken = jwtProvider.createAccessToken(foundUser.getId());
+        return signupResponse.from(foundUser.getId(), applicationAccessToken);
     }
 
     private void validateNotRegistered(User foundUser) {

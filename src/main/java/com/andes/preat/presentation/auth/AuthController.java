@@ -7,6 +7,7 @@ import com.andes.preat.dto.request.auth.UserSignUpTastyInfoRequest;
 import com.andes.preat.dto.request.review.ReviewWithRestaurantIdRequest;
 import com.andes.preat.dto.response.auth.LoginResponse;
 import com.andes.preat.dto.response.auth.NicknameCheckResponse;
+import com.andes.preat.dto.response.auth.signupResponse;
 import com.andes.preat.dto.response.common.BaseResponse;
 import com.andes.preat.exception.badRequest.NotFoundPlatformException;
 import com.andes.preat.service.auth.AuthService;
@@ -36,8 +37,8 @@ public class AuthController {
     @Login
     public ResponseEntity<BaseResponse> signup(@VerifiedMember final UserPayload userPayload,
                                          @RequestBody @Valid final UserSignUpRequest request) {
-        authService.signUp(userPayload.getId(), request);
-        return ResponseEntity.ok().body(new BaseResponse(userPayload.getId()));
+        signupResponse signupResponse = authService.signUp(userPayload.getId(), request);
+        return ResponseEntity.ok().body(new BaseResponse(signupResponse));
     }
     @PostMapping("/signupTest")
     public ResponseEntity<BaseResponse> signupForTest(@RequestParam final Long userId,
